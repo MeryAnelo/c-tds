@@ -1,0 +1,220 @@
+package analizador;
+
+
+import java_cup.runtime.*;
+import java.util.LinkedList;
+
+
+parser code{:
+
+        public void syntax_error(Symbol cur_token){
+            report_error("compiler has detected a syntax error at line " + cur_token.left + " column " + cur_token.right +" symbol "+ (String) cur_token.value,null);
+            // report_error("Syntax error" + cur_token.left,null); 
+        }
+        public void unrecovered_syntax_error(Symbol cur_token) throws java.lang.Exception {
+            report_fatal_error("Couldn't repair and continue parse: "+ (String) cur_token.value, null);
+        }
+
+
+:}
+
+terminal        AND,WHILE,BEGIN,ELSE,END,IF,FOR,OR,CLASS,BREAK,
+                CONTINUE,RET,EXTERN,MULT,PLUS,MINUS,DIVIDE,DIV,SEMI,COMMA,
+                LEFT_P,RT_P,LEFT_B,RT_B,EQ,GTR,LESS,LESS_EQ,GTR_EQ,NOT,NOT_EQ,ASSMNT,
+                AUTOIN,AUTODEC,DOT,BOOLEAN,INT,FLOAT,VOID;
+
+terminal        Boolean boolLiteral;
+terminal        Integer intLiteral;
+terminal        Float floatLiteral;
+terminal        String IDENT;
+
+
+non terminal            Program program;
+non terminal            Declaration body;
+non terminal            FieldDeclaration field_dec;
+non terminal            LinkedList<LocationDeclaration> list_ident;
+non terminal            LinkedList<Method> methods_dec;
+non terminal            LinkedList<Parameter> param;
+non terminal            LinkedList<FieldDeclaration> fields_dec;
+non terminal            Block body_method;
+non terminal            LinkedList<Statement> state_list;
+non terminal            LinkedList<Expression> method_expr;
+non terminal            MethodCall method_call;
+non terminal            Method method_dec;
+non terminal            LocationDeclaration idents_sel;
+non terminal            ClassDec class_dec;
+non terminal            Type type_id;
+non terminal            Statement statement;
+non terminal            Location location;
+non terminal            AssignOpType assing_op;
+non terminal            Expression expr;
+non terminal            BinOpType bin_op,arith_op,rel_op,eq_op,cond_op;
+
+non terminal            Literal literal;
+
+
+precedence left AND;
+precedence left OR;
+precedence left EQ,NOT_EQ,GTR,LESS,LESS_EQ,GTR_EQ;
+precedence left PLUS,MINUS;
+precedence left MULT,DIVIDE,DIV;
+precedence left NOT;
+
+start with program;
+
+
+program ::= program:lp class_dec:cd                                            {: LinkedList<ClassDec> l = new LinkedList<ClassDec>();
+                                                                                  l.add(cd);
+                                                                                  RESULT = new Program(l) ; :}
+            |class_dec:cd                                                      {: LinkedList<ClassDec> l = new LinkedList<ClassDec>() ;
+                                                                                  l.add(cd);
+                                                                                  RESULT = new Program(l) ; :}
+            ;
+
+class_dec ::= CLASS IDENT:i BEGIN body:b END                                   {: RESULT = new ClassDec(i,b); :}
+            ;
+
+body ::= fields_dec:fd                                                         {: RESULT = new Declaration(fd,null); :}
+         |methods_dec:md                                                      {: RESULT = new Declaration(null,md); :}
+         |fields_dec:fd methods_dec:md                                         {: RESULT = new Declaration(fd,md);  :}
+         |
+        ;
+
+field_dec ::= type_id:t list_ident:lid SEMI                             {: RESULT = new FieldDeclaration(t,lid); :}
+            ;
+
+fields_dec ::= field_dec:f                                       {: LinkedList<FieldDeclaration> l = new LinkedList<FieldDeclaration>();
+                                                                       l.add(f);
+                                                                       RESULT = l; :} 
+            | fields_dec:l field_dec:f                            {: l.add(f);
+                                                                       RESULT = l ; :}
+            ;
+
+list_ident ::= idents_sel:ld                                    {: LinkedList<LocationDeclaration> l = new LinkedList<LocationDeclaration>() ;
+                                                                   l.add(ld);
+                                                                   RESULT = l; :}
+            | list_ident:l COMMA idents_sel:ld                  {: l.add(ld);
+                                                                    RESULT = l; :}
+            ;
+
+
+idents_sel ::= IDENT:i                                             {: RESULT = new LocationDeclaration(i,null); :}
+            | IDENT:i LEFT_B intLiteral:il RT_B                    {: RESULT = new LocationDeclaration(i,il); :}
+            ;
+
+methods_dec ::= method_dec:m                                        {: LinkedList<Method> l = new LinkedList<Method>() ;
+                                                                       l.add(m);
+                                                                       RESULT = l; :} 
+            | methods_dec:l method_dec:m                            {: l.add(m);
+                                                                       RESULT = l ; :}
+            ;
+
+method_dec ::= type_id:t IDENT:i LEFT_P RT_P body_method:bm                {: RESULT = new Method(t,i,null,bm); :}
+                |VOID IDENT:i LEFT_P RT_P body_method:bm                 {: RESULT = new Method(Type.VOID,i,null,bm); :}
+                |VOID IDENT:i LEFT_P param:p RT_P body_method:bm         {: RESULT = new Method(Type.VOID,i,p,bm); :}
+                |type_id:t IDENT:i LEFT_P param:p RT_P body_method:bm      {: RESULT = new Method(t,i,p,bm); :}
+                ;
+
+param::= type_id:t IDENT:i                                                  {: LinkedList<Parameter> l = new LinkedList<Parameter>() ; 
+                                                                               l.add(new Parameter(t,i)); 
+                                                                               RESULT= l; :}
+        |param:l COMMA type_id:t IDENT:id                                      {: l.add(new Parameter(t,id)); 
+                                                                               RESULT= l; :}
+        ;
+
+body_method ::= BEGIN fields_dec:fd state_list:st END                        {: RESULT = new Block (fd,st); :}
+                |BEGIN state_list:st END                                    {: RESULT = new Block (null,st); :}
+                |EXTERN SEMI                                                {: RESULT = new Block (null,null); :}
+                ;
+
+
+state_list::= statement:st                                                 {: LinkedList<Statement> ls = new LinkedList<Statement>();
+                                                                              ls.add(st);
+                                                                              RESULT = ls; :}
+            | state_list:st statement:s                                       {: st.add(s);
+                                                                              RESULT = st; :} 
+            ;
+
+statement ::= location:loc assing_op:op expr:e SEMI                             {: RESULT =  new AssignStmt(loc,op,e); :}
+                |method_call:m SEMI                                             {: RESULT = m; :}
+                |IF LEFT_P expr:c RT_P body_method:bIf ELSE body_method:bElse   {: RESULT = new IfStmt(c,bIf,bElse); :}
+                |IF LEFT_P expr:c RT_P body_method:bIf                          {: RESULT = new IfStmt(c,bIf); :}
+                |FOR IDENT:id ASSMNT expr:e1 COMMA expr:e2 statement:s          {: RESULT = new ForStmt((String)id,e1,e2,s); :}
+                |WHILE expr:e statement:s                                       {: RESULT = new WhileStmt(e,s); :}
+                |RET expr:e SEMI                                                {: RESULT = new ReturnStmt(e); :}
+                |RET SEMI                                                       {: RESULT = new ReturnStmt(); :}
+                |BREAK SEMI                                                     {: RESULT = new BreakStmt(); :}
+                |CONTINUE SEMI                                                  {: RESULT = new ContinueStmt(); :}
+                |body_method:bm                                                 {: RESULT = bm; :}
+                |SEMI                                                           {: RESULT = null; :}
+                ;
+
+
+location ::= IDENT:i                                                           {: RESULT = new VarLocation((String)i,null); :}
+            |IDENT:i DOT location:l                                            {: RESULT = new VarLocation((String)i,l); :}
+            |IDENT:i LEFT_B expr:e RT_B                                        {: RESULT = new VarLocation((String)i,e); :}
+            ;
+
+assing_op::= ASSMNT                                                     {: RESULT = AssignOpType.ASSMNT; :}
+            |AUTOIN                                                     {: RESULT = AssignOpType.AUTOIN; :}
+            |AUTODEC                                                    {: RESULT = AssignOpType.AUTODEC; :}
+            ;
+
+expr::= location:loc                                                    {: RESULT = loc; :}
+        |method_call:mc                                                 {: RESULT = new MethodCallExpr(mc); :}
+        |literal:l                                                      {: RESULT = l; :} 
+        |expr:e1 bin_op:op expr:e2                                      {: RESULT = new BinOpExpr(e1,op,e2); :}
+        |MINUS expr:e                                                   {: RESULT = new UnaryOpExpr(UnaryOpType.MINUS,e) ; :} %prec NOT       
+        |NOT expr:e                                                     {: RESULT = new UnaryOpExpr(UnaryOpType.NOT,e) ; :}
+        |LEFT_P expr:e RT_P                                             {: RESULT = e; :}
+        ;
+
+bin_op::= arith_op:ao                                                   {: RESULT = ao; :}
+        |rel_op:ro                                                      {: RESULT = ro; :}
+        |eq_op:eo                                                       {: RESULT = eo; :}
+        |cond_op:co                                                     {: RESULT = co; :}
+        ;
+
+arith_op::= PLUS                                                        {: RESULT = BinOpType.PLUS; :}
+            |MINUS                                                      {: RESULT = BinOpType.MINUS; :}
+            |MULT                                                       {: RESULT = BinOpType.MULT; :}
+            |DIVIDE                                                     {: RESULT = BinOpType.DIVIDE; :}
+            |DIV                                                        {: RESULT = BinOpType.DIV; :}
+            ;
+
+rel_op::=GTR                                                            {: RESULT = BinOpType.GTR; :}
+        |LESS                                                           {: RESULT = BinOpType.LESS; :}
+        |LESS_EQ                                                        {: RESULT = BinOpType.LESS_EQ; :}
+        |GTR_EQ                                                         {: RESULT = BinOpType.GTR_EQ; :}
+        ;
+
+eq_op::= EQ                                                             {: RESULT = BinOpType.EQ; :}
+        |NOT_EQ                                                         {: RESULT = BinOpType.NOT_EQ; :}
+        ;
+
+cond_op::= AND                                                          {: RESULT = BinOpType.AND; :}
+        |OR                                                             {: RESULT = BinOpType.OR; :}
+        ;
+
+literal::= boolLiteral:bol                                              {: RESULT = new BoolLiteral(bol); :}
+        |intLiteral:in                                                  {: RESULT = new IntLiteral(in); :}
+        |floatLiteral:fl                                                {: RESULT = new FloatLiteral(fl); :}
+        ;
+
+method_call ::= IDENT:i LEFT_P RT_P                                     {: RESULT = new MethodCall((String)i,null); :}                                      
+            | IDENT:i LEFT_P method_expr:me RT_P                        {: RESULT = new MethodCall((String)i,me); :}  
+            | IDENT:i DOT method_call:mc                                {: RESULT = new MethodCall((String)i+"."+mc.getId(),mc.getlParam()); :}
+            ;  
+
+method_expr::= expr:e                                                   {: LinkedList<Expression> l = new LinkedList<Expression>() ;
+                                                                           l.add(e);
+                                                                           RESULT = l; :}   
+            |method_expr:me COMMA expr:e                                {: me.add(e); 
+                                                                           RESULT = me; :}
+            ;
+
+
+type_id ::= INT                                                         {: RESULT = Type.INT ; :}
+        |FLOAT                                                         {: RESULT = Type.FLOAT ; :}
+        |BOOLEAN                                                        {: RESULT = Type.BOOLEAN ; :}
+        ;
