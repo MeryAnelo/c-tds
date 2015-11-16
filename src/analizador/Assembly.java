@@ -41,7 +41,6 @@ public class Assembly {
                     case ADDFLOAT:
                         w.write(generateAddFloat(gen));
                         break;
-                        //aca escribir en el archivo
                     case MULTI:
                         w.write(generateMultInt(gen));
                         break;
@@ -120,12 +119,11 @@ public class Assembly {
                         w.write(generatePushInt(gen));
                         break;
                     case PUSHF:
+                        w.write(generatePushFloat(gen));
                         break;
-                        //aca escribir en el archivo
                     case LABEL:
                         w.write("." + gen.getS()+"\n");
                         break;
-                        //aca escribir en el archivo
                 }
             }
             w.close();
@@ -427,6 +425,19 @@ public class Assembly {
             result = "movl " + varOperand(op.getOp1()) + ", " + registro+"\n";
         }else{
             result = "push " + varOperand(op.getOp1())+"\n";
+            pusheado++;
+        }
+        return result;
+    }
+    
+    private String generatePushFloat(OperadorCI op){
+        int value = ((IntLiteral)op.getOp()).getValue();
+        String result;
+        if (value>=0 && value<=7){
+            result="movl " + varOperand(op.getOp()) + ", %eax\n"+
+                   "movl %eax, %xmm"+value+"\n";
+        }else{
+            result="push "+varOperand(op.getOp())+"\n";
             pusheado++;
         }
         return result;
