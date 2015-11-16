@@ -39,6 +39,7 @@ public class Assembly {
                        w.write(generateAddInt(gen));
                        break;
                     case ADDFLOAT:
+                        w.write(generateAddFloat(gen));
                         break;
                         //aca escribir en el archivo
                     case MULTI:
@@ -99,8 +100,8 @@ public class Assembly {
                         w.write(generateMin(gen));
                         break;
                     case RET:
+                        w.write(generateReturn(gen));
                         break;
-                        //aca escribir en el archivo
                     case CALL:
                         w.write(generateCall(gen));
                         break;
@@ -187,7 +188,7 @@ public class Assembly {
         return result;
     }
     
-    /*private String generateAddFloat(OperadorCI op){
+    private String generateAddFloat(OperadorCI op){
         String result = "movl " + varOperand(op.getOp()) + ", %eax\n"+
                         "movl %eax, %xmm0\n"+
                         "movl " + varOperand(op.getOp1()) + ", %eax\n"+
@@ -195,7 +196,7 @@ public class Assembly {
                         "addss %xmm1, %xmm0\n"+
                         "movl %xmm0, " + varOperand(op.getOp2())+"\n";
         return result;
-    }*/
+    }
     
     private String generateMultInt(OperadorCI op){
         String result = "movl " + varOperand(op.getOp()) + ", %eax\n"+
@@ -468,9 +469,11 @@ public class Assembly {
                 result += "movl %eax, %xmm0\n";
             }
         }else{
-            result = "nop\n";
+            result = "nop\n"; //no operaciòn, "return;"
         }
         result += "leave\nret\n";
         return result;
     }
+    
+    
 }
