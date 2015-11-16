@@ -21,6 +21,11 @@ public class MethodCallExpr extends Expression {
 	public MethodCall getMethodCallExpr() {
 		return this.mc;
 	}
+        
+        @Override
+        public String toString(){
+            return mc.toString();
+        }
 	
 	public void setMethodCallExpr(MethodCall e) {
 		this.mc = e;

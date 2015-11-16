@@ -34,6 +34,7 @@ public class Assembly {
             for (int i = 0; i < lista.size(); i++) {
                 op = lista.get(i).getNom();
                 OperadorCI gen=lista.get(i);
+                System.out.println("--"+lista.get(i).getNom()+"="+op);
                 switch (op){
                     case ADDINT:
                        w.write(generateAddInt(gen));
@@ -125,7 +126,10 @@ public class Assembly {
                         w.write("." + gen.getS()+"\n");
                         break;
                 }
+                System.out.println(i+" < "+lista.size());
             }
+            System.out.println("SALI");
+            System.out.println("Archivo: \n\n"+w.toString());
             w.close();
             
         }catch (IOException e){System.out.println(e.getMessage());}
@@ -134,8 +138,8 @@ public class Assembly {
     
     private String varOperand(Expression e){
         String type = e.getClass().getSimpleName();
-        Location expLoc=(Location) e;
         if (type.equals("VarLocation")){ 
+           Location expLoc=(Location) e;
            int offset= ((Location)e).getOffset();
            if (offset >= 1 && offset <= 7 ){
                if(expLoc.getType().toString().equals("float")){
@@ -163,7 +167,8 @@ public class Assembly {
             /*
             **ES UN LITERAL
             */
-            String valor = e.getExpression().toString();
+            System.out.println("clase: "+e.getClass().toString());
+            String valor=valor=e.toString();
             if (e.getType().toString().equals("float")){
                 Float valorF = Float.valueOf(valor);
                 valor = "" + Float.floatToIntBits(valorF);
@@ -398,6 +403,7 @@ public class Assembly {
     }
     
     private String generatePushInt(OperadorCI op){
+        System.out.println("---------"+ ((IntLiteral)op.getOp()).getValue());
         int value = ((IntLiteral)op.getOp()).getValue();
         String registro = "";
         String result;

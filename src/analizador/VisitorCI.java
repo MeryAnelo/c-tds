@@ -56,7 +56,8 @@ public class VisitorCI implements ASTVisitor<Expression>{
             case ASSMNT:
                 offset -= Byte;
                 loc.setOffset(offset);
-                li.add(new OperadorCI(listaCI.ASSMNT, loc, expr, null));
+                Expression e=expr.accept(this);
+                li.add(new OperadorCI(listaCI.ASSMNT, loc, e, null));
                 break;
         }
         return null;
@@ -72,6 +73,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
         VarLocation var = new VarLocation("temp" + id,null);
         offset -= Byte;
         var.setOffset(offset);
+        var.setType(left.getType());
         switch (op) {
             case MINUS:
                 if (left.getClass().equals(Integer.class)) {
@@ -305,12 +307,17 @@ public class VisitorCI implements ASTVisitor<Expression>{
         offset -= Byte;
         res.setOffset(offset);
         li.add(new OperadorCI(listaCI.CALL, mc.getId(),res));
-        return null;
+        return res;
     }
 
     @Override
     public Expression visit(MethodCallExpr mcExpr) {
-        return mcExpr;
+        VarLocation res = new VarLocation("temp"+count,null);
+        count++;
+        offset -= Byte;
+        res.setOffset(offset);
+        li.add(new OperadorCI(listaCI.CALL,mcExpr.toString(),res));
+        return res;
     }
 
     @Override

@@ -18,6 +18,7 @@ public class VisitorType implements ASTVisitor <String>{
 
     public String visit(AssignStmt AssSt) {
         String analyze=AssSt.getExpression().accept(this);
+        
         if(AssSt.getExpression().getClass().toString().contains("BinOpExpr")){
             return analyze;
         }else{
