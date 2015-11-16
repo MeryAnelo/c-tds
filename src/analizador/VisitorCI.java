@@ -195,7 +195,21 @@ public class VisitorCI implements ASTVisitor<Expression>{
 
     @Override
     public Expression visit(ExternStmt extSt) {
-        return null;
+        Expression expr;
+        for (int i = 0; i < extSt.getMc().getlParam().size(); i++) {
+            expr = extSt.getMc().getlParam().get(i);
+            if (expr.getType()==Type.INT || expr.getType()==Type.BOOLEAN) {
+                li.add(new OperadorCI(listaCI.PUSHI,expr,null,null));
+            }else if(expr.getType()==Type.FLOAT){
+                li.add(new OperadorCI(listaCI.PUSHF,expr,null,null));
+            }
+        }
+        VarLocation res = new VarLocation("temp"+count,null);
+        count++;
+        offset -= Byte;
+        res.setOffset(offset);
+        li.add(new OperadorCI(listaCI.CALL, extSt.getMc().getId(),res));
+        return res;
     }
 
     @Override
@@ -275,19 +289,8 @@ public class VisitorCI implements ASTVisitor<Expression>{
 
     @Override
     public Expression visit(Method meth) {
-//        int j = 1;
-//        for (int i = meth.getParameter().size()-1; i>=0; i--){
-//            VarLocation var = meth.getParameter().get(i).getVar();
-//            if(j<7){
-//                var.setOffset(j);
-//            }else{
-//                offset += Byte;
-//                var.setOffset(offset);
-//            }
-//            j++;
-//        }
-        meth.getBlock().accept(this);
-        return null;
+       meth.getBlock().accept(this);
+       return null;
     }
 
     @Override

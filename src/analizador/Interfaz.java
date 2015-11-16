@@ -102,12 +102,12 @@ public class Interfaz extends javax.swing.JFrame {
                         VisitorCI v3 = new VisitorCI();
                         v3.visit(res);
                         v3.print();
-                        Assembly ass = new Assembly();
+                        //Assembly ass = new Assembly();
                         String rute = selector.getAbsolutePath().substring(0,selector.getAbsolutePath().lastIndexOf("/"));
                         rute=rute.substring(rute.lastIndexOf("/")+1,rute.length())+"/";
                         String name = selector.getName().substring(0, selector.getName().length()-".compi".length())+".s";
                         System.out.println("ruta: "+rute+name);
-                        ass.generateAss(rute,name,v3.getListaCI());
+                        //ass.generateAss(rute,name,v3.getListaCI());
                 }else{
                     JOptionPane.showMessageDialog(this, "Invalid file extension", "Error!", JOptionPane.ERROR_MESSAGE);
                 }

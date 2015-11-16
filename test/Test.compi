@@ -7,8 +7,9 @@ class Main {
     int inc(int x){
             return x+1;
     }
-
     void main(){ 
+    	extern void printI(int i);
+
             int n1,n2;
             int res; 
             n1=10;

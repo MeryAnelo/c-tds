@@ -105,7 +105,7 @@ public class VisitorType implements ASTVisitor <String>{
     }
 
     public String visit(ExternStmt extSt) {
-        return null;
+        return extSt.toString();
     }
 
     public String visit(FieldDeclaration flDec) {
