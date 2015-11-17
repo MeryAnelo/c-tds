@@ -100,8 +100,8 @@ public class Interfaz extends javax.swing.JFrame {
                         VisitorType v2 = new VisitorType();
                         v2.visit(res);
                         VisitorCI v3 = new VisitorCI();
-                        v3.visit(res);
-                        v3.print();
+                        //v3.visit(res);
+                        //v3.print();
                         //Assembly ass = new Assembly();
                         String rute = selector.getAbsolutePath().substring(0,selector.getAbsolutePath().lastIndexOf("/"));
                         rute=rute.substring(rute.lastIndexOf("/")+1,rute.length())+"/";

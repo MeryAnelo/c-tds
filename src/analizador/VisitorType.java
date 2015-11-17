@@ -49,12 +49,21 @@ public class VisitorType implements ASTVisitor <String>{
 
     public String visit(Block bl) {
         String acEnc=null;
-        int i=0;
-        while(i<bl.getStatements().size() && acEnc==null){
-            if(bl.getStatements().get(i)!=null){
-                acEnc=bl.getStatements().get(i).accept(this);
+        
+        if (bl.getField()==null && bl.getStatements()==null) {
+            System.out.println("EXTERN:");
+            
+        }
+        if (bl.getField()!=null || bl.getStatements()!=null){
+            
+            int i=0;
+            while(i<bl.getStatements().size() && acEnc==null){
+                if(bl.getStatements().get(i)!=null){
+                    acEnc=bl.getStatements().get(i).accept(this);
+                }
+                i++;
             }
-            i++;
+            
         }
         return acEnc;
     }
@@ -105,7 +114,7 @@ public class VisitorType implements ASTVisitor <String>{
     }
 
     public String visit(ExternStmt extSt) {
-        return extSt.toString();
+        return null;
     }
 
     public String visit(FieldDeclaration flDec) {
