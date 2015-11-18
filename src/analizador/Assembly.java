@@ -189,7 +189,8 @@ public class Assembly {
     
     private String generateAddInt(OperadorCI op){
         String result = "movl " + varOperand(op.getOp()) + ", %eax\n"+
-                        "addl " + varOperand(op.getOp1()) + ", %eax\n"+
+                        "movl " + varOperand(op.getOp1()) + ", %edx\n"+
+                        "addl " + "%edx" + ", %eax\n"+
                         "movl %eax, " + varOperand(op.getOp2())+"\n";
         return result;
     }
@@ -235,8 +236,9 @@ public class Assembly {
     }
     
     private String generateAssmnt(OperadorCI op){
-        String result= "movl " + varOperand(op.getOp()) + ", %eax\n"+ 
-                        "movl %eax, " + varOperand(op.getOp1())+"\n"; 
+        
+        String result=  "movl "+ varOperand(op.getOp1()) + ", %eax \n"+
+                        "movl " + "%eax" +", "+varOperand(op.getOp())+"\n";
         return result;
     }
     
