@@ -243,8 +243,8 @@ public class Assembly {
     private String generateMinusInt(OperadorCI op){
         String result = "movl " + varOperand(op.getOp()) + ", %eax\n"+
                         "movl " + varOperand(op.getOp1()) + ", %edx\n"+
-                        "movl " + "%edx" + ", %ecx\n"+
-                        "subl " + "%edx" + ", %ecx\n"+
+                        //"movl " + "%edx" + ", %ecx\n"+
+                        "subl " + "%edx" + ", %eax\n"+
                         "movl " + "%ecx" + ", %eax\n"+
                         "movl %eax, " + varOperand(op.getOp2())+"\n";
         return result;

@@ -6,9 +6,7 @@ movl $10, %eax
 movl %eax, -8(%ebp)
 movl -12(%ebp), %eax
 movl -16(%ebp), %edx
-movl %edx, %ecx
-subl %eax, %edx
-movl %ecx, %eax
+addl %edx, %eax
 movl %eax, -28(%ebp)
 movl -28(%ebp), %eax 
 movl %eax, -24(%ebp)
