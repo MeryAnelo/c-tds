@@ -146,6 +146,11 @@ public class VisitorCI implements ASTVisitor<Expression>{
             if(bl.getStatements().get(i)!=null){
                 bl.getStatements().get(i).accept(this);
             }
+            if(bl.getStatements().get(i)==null && bl.getStatements().get(i)==null){
+                ExternStmt ext=new ExternStmt();
+                ext.accept(this);
+                System.out.println("Existe un extern, estoy pasando el visitor CI...");
+            }
             i++;
         }
         return null;

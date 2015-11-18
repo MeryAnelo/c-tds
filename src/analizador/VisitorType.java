@@ -50,16 +50,20 @@ public class VisitorType implements ASTVisitor <String>{
     public String visit(Block bl) {
         String acEnc=null;
         
-        if (bl.getField()==null && bl.getStatements()==null) {
-            System.out.println("EXTERN:");
-            
-        }
+//        if (bl.getField()==null && bl.getStatements()==null) {
+//            System.out.println("EXTERN:");
+//            
+//        }
         if (bl.getField()!=null || bl.getStatements()!=null){
-            
             int i=0;
             while(i<bl.getStatements().size() && acEnc==null){
                 if(bl.getStatements().get(i)!=null){
                     acEnc=bl.getStatements().get(i).accept(this);
+                }
+                if(bl.getStatements().get(i)==null && bl.getStatements().get(i)==null){
+                    ExternStmt ext=new ExternStmt();
+                    acEnc=ext.accept(this);
+                    System.out.println("Existe un extern, estoy pasando el visitor Type...");
                 }
                 i++;
             }
