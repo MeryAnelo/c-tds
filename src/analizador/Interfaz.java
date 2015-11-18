@@ -99,16 +99,21 @@ public class Interfaz extends javax.swing.JFrame {
                         v.visit(res);
                         VisitorType v2 = new VisitorType();
                         v2.visit(res);
+//                        VisitorPrint v4 = new VisitorPrint();
+//                        System.out.println("PASE");
+//                        v4.visit(res);
 //                        System.out.println("PASE EL VISITOR TIPE");
                         VisitorCI v3 = new VisitorCI();
                         v3.visit(res);
                         v3.print();
-                        //Assembly ass = new Assembly();
-                        String rute = selector.getAbsolutePath().substring(0,selector.getAbsolutePath().lastIndexOf("/"));
-                        rute=rute.substring(rute.lastIndexOf("/")+1,rute.length())+"/";
+                        
+                        Assembly ass = new Assembly();
+                        //String rute = selector.getAbsolutePath().substring(0,selector.getAbsolutePath().lastIndexOf("/"));
+                        //rute=rute.substring(rute.lastIndexOf("/")+1,rute.length())+"/";
                         String name = selector.getName().substring(0, selector.getName().length()-".compi".length())+".s";
-                        System.out.println("ruta: "+rute+name);
-                        //ass.generateAss(rute,name,v3.getListaCI());
+                        //System.out.println("ruta: "+rute+name);
+                        String rute="C:\\Users\\juancruz\\Documents\\NetBeansProjects\\c-tds\\test";
+                        ass.generateAss(rute,name,v3.getListaCI());
                 }else{
                     JOptionPane.showMessageDialog(this, "Invalid file extension", "Error!", JOptionPane.ERROR_MESSAGE);
                 }

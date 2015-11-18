@@ -1,20 +1,15 @@
-.Method: sum
-movl -12(%rbp), %eax
-movl %eax, -8(%rbp)
-movl -16(%rbp), %eax
-addl -20(%rbp), %eax
-movl %eax, -24(%rbp)
-.End-Method: sum
-.Method: inc
-movl -28(%rbp), %eax
-addl $1, %eax
-movl %eax, -32(%rbp)
-.End-Method: inc
+.Method Extern: printI
 .Method: main
-movl -36(%rbp), %eax
+movl -4(%rbp), %eax
+movl %eax, $5
+movl -8(%rbp), %eax
 movl %eax, $10
-movl -40(%rbp), %eax
-movl %eax, $analizador.MethodCallExpr@6d6f6e28
-movl -44(%rbp), %eax
-movl %eax, $analizador.MethodCallExpr@135fbaa4
+movl -12(%rbp), %eax
+addl -16(%rbp), %eax
+movl %eax, -28(%rbp)
+movl -24(%rbp), %eax
+movl %eax, -28(%rbp)
+nop
+leave
+ret
 .End-Method: main

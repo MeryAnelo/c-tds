@@ -14,21 +14,24 @@ public class VisitorPrint implements ASTVisitor <String>{
 
     @Override
     public String visit(AssignStmt AssSt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
 
     @Override
     public String visit(BinOpExpr bOpExpr) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.2"); //To change body of generated methods, choose Tools | Templates.
     }
 
     public String visit(BinOpType bOpType) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.3"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String visit(Block bl) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (int i = 0; i < bl.getStatements().size(); i++) {
+            bl.getStatements().get(i).accept(this);
+        }
+        return null;
     }
 
     @Override
@@ -43,7 +46,8 @@ public class VisitorPrint implements ASTVisitor <String>{
 
     @Override
     public String visit(ClassDec clDec) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        clDec.getBody().getMethod().getFirst().accept(this);
+        return null;
     }
 
     @Override
@@ -53,12 +57,13 @@ public class VisitorPrint implements ASTVisitor <String>{
 
     @Override
     public String visit(Declaration dec) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        dec.accept(this);
+        return null;
     }
 
     @Override
     public String visit(Expression expr) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.4"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -68,7 +73,7 @@ public class VisitorPrint implements ASTVisitor <String>{
 
     @Override
     public String visit(FieldDeclaration flDec) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.5"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -108,32 +113,39 @@ public class VisitorPrint implements ASTVisitor <String>{
 
     @Override
     public String visit(Method meth) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        meth.getBlock().accept(this);
+        return null;
     }
 
     @Override
     public String visit(MethodCall mc) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (Expression e : mc.getlParam()) {
+            System.out.println("Parametros: ");
+            System.out.println("Nombre: "+e.toString()+"Tipo: "+e.getType());
+        }
+        return null;
     }
 
     @Override
     public String visit(MethodCallExpr mcExpr) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        mcExpr.accept(this);
+        return null;
     }
 
     @Override
     public String visit(Parameter param) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.6"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public String visit(ReturnStmt ret) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
 
     @Override
     public String visit(Statement stmt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        stmt.accept(this);
+        return null;
     }
 
     public String visit(Type type) {
@@ -142,7 +154,7 @@ public class VisitorPrint implements ASTVisitor <String>{
 
     @Override
     public String visit(UnaryOpExpr unOpExpr) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.8"); //To change body of generated methods, choose Tools | Templates.
     }
 
     public String visit(UnaryOpType unOpType) {
@@ -161,7 +173,8 @@ public class VisitorPrint implements ASTVisitor <String>{
 
     @Override
     public String visit(Program prog) {
-        System.out.println(prog.getL().get(0).getId());
+        //System.out.println(prog.getL().get(0).getId());
+        prog.getL().getFirst().accept(this);
         return null;
     }
 }
