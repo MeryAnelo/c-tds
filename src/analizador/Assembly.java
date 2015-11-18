@@ -164,7 +164,7 @@ public class Assembly {
                   }
                 }
            }else{
-                return offset +"(%rbp)"; //MEMORIA
+                return offset +"(%ebp)"; //MEMORIA
            }
         }else{ 
             /*
@@ -244,7 +244,10 @@ public class Assembly {
     
     private String generateMinusInt(OperadorCI op){
         String result = "movl " + varOperand(op.getOp()) + ", %eax\n"+
-                        "subl " + varOperand(op.getOp1()) + ", %eax\n"+
+                        "movl " + varOperand(op.getOp1()) + ", %edx\n"+
+                        "movl " + "%edx" + ", %ecx\n"+
+                        "subl " + "%edx" + ", %ecx\n"+
+                        "movl " + "%ecx" + ", %eax\n"+
                         "movl %eax, " + varOperand(op.getOp2())+"\n";
         return result;
     }

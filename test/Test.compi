@@ -4,7 +4,7 @@ class Main {
         int n1,n2,res;
         n1=5;
         n2=10;
-        res=n1+n2;
+        res=n1-n2;
         //printI(n2);
         return;
     }

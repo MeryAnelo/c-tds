@@ -48,7 +48,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
             case AUTODEC:
                 offset -= Byte;
                 loc.setOffset(offset);
-                if (loc.getClass().equals(Integer.class)) {
+                if (loc.type==Type.INT) {
                     li.add(new OperadorCI(listaCI.MINUSI, loc, expr, loc));
                 }else{
                     li.add(new OperadorCI(listaCI.MINUSF, loc, expr, loc));
@@ -77,7 +77,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
         var.setType(left.getType());
         switch (op) {
             case MINUS:
-                if (left.getClass().equals(Integer.class)) {
+                if (left.getType()==Type.INT) {
                     li.add(new OperadorCI(listaCI.MINUSI, left, right, var));
                 }else{
                     li.add(new OperadorCI(listaCI.MINUSF, left, right, var));
