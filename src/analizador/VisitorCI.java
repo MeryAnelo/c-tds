@@ -188,6 +188,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
             if (dec.getMethod().get(i).getBlock().getField()==null && dec.getMethod().get(i).getBlock().getStatements()==null){
                 li.add(new OperadorCI(listaCI.LABEL,"Method Extern: "+dec.getMethod().get(i).getId()));
                 dec.getMethod().get(i).setExtern(true);
+                methodsExtern.add(dec.getMethod().get(i).getId());
             }else{
                 li.add(new OperadorCI(listaCI.LABEL,"Method: "+dec.getMethod().get(i).getId()));
                 dec.getMethod().get(i).accept(this);
@@ -305,7 +306,12 @@ public class VisitorCI implements ASTVisitor<Expression>{
         count++;
         offset -= Byte;
         res.setOffset(offset);
-        li.add(new OperadorCI(listaCI.CALL, mc.getId(),res));
+        if (methodsExtern.contains(mc.getId())) {
+            System.out.println("SOY EXTERN: "+mc.getId());
+            li.add(new OperadorCI(listaCI.CALL_EXTERN, mc.getId(),res));
+        }else{
+            li.add(new OperadorCI(listaCI.CALL, mc.getId(),res));
+        }
         return res;
     }
 

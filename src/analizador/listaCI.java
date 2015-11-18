@@ -33,6 +33,7 @@ public enum listaCI {
     MIN,
     RET,
     CALL,
+    CALL_EXTERN,
     JUMP,
     JUMP_FALSE,
     BREAK,

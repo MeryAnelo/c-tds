@@ -77,7 +77,7 @@ public class OperadorCI {
     @Override
     public String toString() {
         String res = nom.toString();
-        if (nom==listaCI.LABEL || nom==listaCI.JUMP_FALSE || nom==listaCI.JUMP || nom==listaCI.CALL) {
+        if (nom==listaCI.LABEL || nom==listaCI.JUMP_FALSE || nom==listaCI.JUMP || nom==listaCI.CALL || nom==listaCI.CALL_EXTERN) {
             res = nom.toString()+" "+s;
         }
         if (op!=null){
