@@ -31,6 +31,8 @@ public abstract class Expression extends AST {
                 this.type=Type.FLOAT;
             }else if(t.equals("boolean")){
                 this.type=Type.BOOLEAN;
+            }else if(t.equals("void")){
+                this.type=Type.VOID;
             }else{
                 this.type=Type.UNDEFINED;
             }

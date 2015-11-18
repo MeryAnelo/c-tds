@@ -131,8 +131,6 @@ public class Assembly {
                 }
                 System.out.println(i+" < "+lista.size());
             }
-            System.out.println("SALI");
-            System.out.println("Archivo: \n\n"+w.toString());
             w.close();
             
         }catch (IOException e){System.out.println(e.getMessage());}

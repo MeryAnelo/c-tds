@@ -186,11 +186,11 @@ public class VisitorCI implements ASTVisitor<Expression>{
         int i=0;
         while (i < dec.getMethod().size()){
             if (dec.getMethod().get(i).getBlock().getField()==null && dec.getMethod().get(i).getBlock().getStatements()==null){
-                li.add(new OperadorCI(listaCI.LABEL,"Method Extern: "+dec.getMethod().get(i).getId()));
+                li.add(new OperadorCI(listaCI.LABEL,dec.getMethod().get(i).getId()+":"));
                 dec.getMethod().get(i).setExtern(true);
                 methodsExtern.add(dec.getMethod().get(i).getId());
             }else{
-                li.add(new OperadorCI(listaCI.LABEL,"Method: "+dec.getMethod().get(i).getId()));
+                li.add(new OperadorCI(listaCI.LABEL,dec.getMethod().get(i).getId()+":"));
                 dec.getMethod().get(i).accept(this);
                 li.add(new OperadorCI(listaCI.LABEL,"End-Method: "+dec.getMethod().get(i).getId()));
             }
@@ -299,6 +299,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
             expr = l.get(i);
             System.out.println("METODO: "+mc.getId()+" Parametro Nª: "+expr.toString()+" Tipo: "+expr.getType());
             if (expr.getType()==Type.INT || expr.getType()==Type.BOOLEAN) {
+                expr.setType(Type.INT);
                 System.out.println("Metodo: "+mc.getId()+" Push Nª: "+expr.toString());
                 li.add(new OperadorCI(listaCI.PUSHI,expr,null,null));
             }else if(expr.getType()==Type.FLOAT){
