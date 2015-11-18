@@ -11,11 +11,12 @@ class Main {
     void main(){ 
     	
 
-            int n1,n2;
+            int n1;
+            int n2;
             int res; 
             n1=10;
             n2=inc(n1);
-            printI(n2);
+            //printI(n2);
             
             res=sum(n1,n2);
             return;

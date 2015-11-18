@@ -295,8 +295,11 @@ public class VisitorCI implements ASTVisitor<Expression>{
         LinkedList<Expression> l = mc.getlParam();
         Expression expr;
         for (int i = 0; i < l.size(); i++) {
+            //System.out.println("Metodo: "+mc.getId()+" Parametro Nª: "+i+" Tamaño Parametro: "+l.size());
             expr = l.get(i);
+            System.out.println("METODO: "+mc.getId()+" Parametro Nª: "+expr.toString()+" Tipo: "+expr.getType());
             if (expr.getType()==Type.INT || expr.getType()==Type.BOOLEAN) {
+                System.out.println("Metodo: "+mc.getId()+" Push Nª: "+expr.toString());
                 li.add(new OperadorCI(listaCI.PUSHI,expr,null,null));
             }else if(expr.getType()==Type.FLOAT){
                 li.add(new OperadorCI(listaCI.PUSHF,expr,null,null));
