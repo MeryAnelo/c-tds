@@ -13,6 +13,7 @@ import java.util.LinkedList;
  */
 public class VisitorCI implements ASTVisitor<Expression>{
 
+    LinkedList<String> methodsExtern = new LinkedList();
     LinkedList<OperadorCI> li = new LinkedList();
     LinkedList<Pair> pila = new LinkedList();
     int count = 0;
@@ -142,10 +143,8 @@ public class VisitorCI implements ASTVisitor<Expression>{
     public Expression visit(Block bl) {
         /*para extern*/
         if (bl.getField()==null && bl.getStatements()==null) {
-            System.out.println("Extern...");
             ExternStmt ext=new ExternStmt();
             ext.accept(this);
-            System.out.println("PASO??");
         }
         int i =0;
         while(i < bl.getStatements().size()){
@@ -186,9 +185,14 @@ public class VisitorCI implements ASTVisitor<Expression>{
     public Expression visit(Declaration dec) {
         int i=0;
         while (i < dec.getMethod().size()){
-            li.add(new OperadorCI(listaCI.LABEL,"Method: "+dec.getMethod().get(i).getId()));
-            dec.getMethod().get(i).accept(this);
-            li.add(new OperadorCI(listaCI.LABEL,"End-Method: "+dec.getMethod().get(i).getId()));
+            if (dec.getMethod().get(i).getBlock().getField()==null && dec.getMethod().get(i).getBlock().getStatements()==null){
+                li.add(new OperadorCI(listaCI.LABEL,"Method Extern: "+dec.getMethod().get(i).getId()));
+                dec.getMethod().get(i).setExtern(true);
+            }else{
+                li.add(new OperadorCI(listaCI.LABEL,"Method: "+dec.getMethod().get(i).getId()));
+                dec.getMethod().get(i).accept(this);
+                li.add(new OperadorCI(listaCI.LABEL,"End-Method: "+dec.getMethod().get(i).getId()));
+            }
             i++;
         }
         return null;
@@ -201,21 +205,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
 
     @Override
     public Expression visit(ExternStmt extSt) {
-        Expression expr;
-        for (int i = 0; i < extSt.getMc().getlParam().size(); i++) {
-            expr = extSt.getMc().getlParam().get(i);
-            if (expr.getType()==Type.INT || expr.getType()==Type.BOOLEAN) {
-                li.add(new OperadorCI(listaCI.PUSHI,expr,null,null));
-            }else if(expr.getType()==Type.FLOAT){
-                li.add(new OperadorCI(listaCI.PUSHF,expr,null,null));
-            }
-        }
-        VarLocation res = new VarLocation("temp"+count,null);
-        count++;
-        offset -= Byte;
-        res.setOffset(offset);
-        li.add(new OperadorCI(listaCI.CALL, extSt.getMc().getId(),res));
-        return res;
+        return null;
     }
 
     @Override
@@ -295,8 +285,8 @@ public class VisitorCI implements ASTVisitor<Expression>{
 
     @Override
     public Expression visit(Method meth) {
-       meth.getBlock().accept(this);
-       return null;
+        meth.getBlock().accept(this);
+        return null;
     }
 
     @Override
@@ -321,12 +311,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
 
     @Override
     public Expression visit(MethodCallExpr mcExpr) {
-        VarLocation res = new VarLocation("temp"+count,null);
-        count++;
-        offset -= Byte;
-        res.setOffset(offset);
-        li.add(new OperadorCI(listaCI.CALL,mcExpr.toString(),res));
-        return res;
+        return mcExpr.getMethodCallExpr().accept(this);
     }
 
     @Override

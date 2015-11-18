@@ -14,6 +14,7 @@ class Main {
             int n1,n2;
             int res; 
             n1=10;
+            //printI(n1);
             n2=inc(n1);
             res=sum(n1,n2);
             return;

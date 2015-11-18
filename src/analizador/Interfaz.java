@@ -99,7 +99,7 @@ public class Interfaz extends javax.swing.JFrame {
                         v.visit(res);
                         VisitorType v2 = new VisitorType();
                         v2.visit(res);
-                        System.out.println("PASE EL VISITOR TIPE");
+//                        System.out.println("PASE EL VISITOR TIPE");
                         VisitorCI v3 = new VisitorCI();
                         v3.visit(res);
                         v3.print();
