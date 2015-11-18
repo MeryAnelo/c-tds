@@ -140,16 +140,17 @@ public class VisitorCI implements ASTVisitor<Expression>{
 
     @Override
     public Expression visit(Block bl) {
+        /*para extern*/
+        if (bl.getField()==null && bl.getStatements()==null) {
+            System.out.println("Extern...");
+            ExternStmt ext=new ExternStmt();
+            ext.accept(this);
+            System.out.println("PASO??");
+        }
         int i =0;
         while(i < bl.getStatements().size()){
-           
             if(bl.getStatements().get(i)!=null){
                 bl.getStatements().get(i).accept(this);
-            }
-            if(bl.getStatements().get(i)==null && bl.getField().get(i)==null){
-                ExternStmt ext=new ExternStmt();
-                ext.accept(this);
-                System.out.println("Existe un extern, estoy pasando el visitor CI...");
             }
             i++;
         }
