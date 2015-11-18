@@ -60,7 +60,7 @@ public class VisitorType implements ASTVisitor <String>{
                 if(bl.getStatements().get(i)!=null){
                     acEnc=bl.getStatements().get(i).accept(this);
                 }
-                if(bl.getStatements().get(i)==null && bl.getStatements().get(i)==null){
+                if(bl.getStatements().get(i)==null && bl.getField().get(i)==null){
                     ExternStmt ext=new ExternStmt();
                     acEnc=ext.accept(this);
                     System.out.println("Existe un extern, estoy pasando el visitor Type...");
