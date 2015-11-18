@@ -105,6 +105,9 @@ public class Assembly {
                     case CALL:
                         w.write(generateCall(gen));
                         break;
+                    case CALL_EXTERN:
+                        //aca escribir en el archivo
+                        break;
                     case JUMP:
                         w.write(generateJump(gen));
                         break;

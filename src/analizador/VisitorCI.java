@@ -307,7 +307,6 @@ public class VisitorCI implements ASTVisitor<Expression>{
         offset -= Byte;
         res.setOffset(offset);
         if (methodsExtern.contains(mc.getId())) {
-            System.out.println("SOY EXTERN: "+mc.getId());
             li.add(new OperadorCI(listaCI.CALL_EXTERN, mc.getId(),res));
         }else{
             li.add(new OperadorCI(listaCI.CALL, mc.getId(),res));
