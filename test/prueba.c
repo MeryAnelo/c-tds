@@ -1,24 +1,30 @@
 #include <stdio.h> 
 
-int sum(int x, int y){
+
+ //   void printI(int i) extern;
+
+/*    int sum(int x, int y){
+            x=x/2;
+            return x+y;
+    }
+
+    void inc(int x){
+            x=x+1;
+    }*/
+
+    void main(){ 
+        int n1,n2,res;
+        n1=5;
+        n2=10;
+        res=n1-n2;
 
 
-	x=x/2;
+ //       inc(n1);
 
+  //      printI(n2);
+
+ //       res=sum(n1,n2);
+        
+        return;
+    }
 	
-	return x+y;
-}
-
-int inc(int x){
-	return x+1;
-}
-
-void main() 
-{ 
-	int n1,n2;
-	int res; 
-	n1=10;
-	n2=inc(n1);
-	res=sum(n1,n2);
-    //printf ("La suma es: %d",res); 
-}
