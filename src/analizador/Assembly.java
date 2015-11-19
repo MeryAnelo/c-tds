@@ -126,7 +126,10 @@ public class Assembly {
                         w.write(generatePushFloat(gen));
                         break;
                     case LABEL:
-                        w.write("." + gen.getS()+"\n");
+                        w.write("." + gen.getS()+"\n"+
+                                "pushl %ebp\n"+
+                                "movl %esp, %ebp\n"+
+                                "subl $16, %esp\n");
                         break;
                 }
                 System.out.println(i+" < "+lista.size());

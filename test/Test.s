@@ -1,5 +1,11 @@
 .printI:
+pushl %ebp
+movl %esp, %ebp
+subl $16, %esp
 .main:
+pushl %ebp
+movl %esp, %ebp
+subl $16, %esp
 movl $5, %eax 
 movl %eax, -4(%ebp)
 movl $10, %eax 
@@ -14,3 +20,6 @@ nop
 leave
 ret
 .End-Method: main
+pushl %ebp
+movl %esp, %ebp
+subl $16, %esp
