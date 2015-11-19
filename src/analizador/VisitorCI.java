@@ -14,6 +14,7 @@ import java.util.LinkedList;
 public class VisitorCI implements ASTVisitor<Expression>{
 
     LinkedList<String> methodsExtern = new LinkedList();
+    LinkedList<Location> locations = new LinkedList();
     LinkedList<OperadorCI> li = new LinkedList();
     LinkedList<Pair> pila = new LinkedList();
     int count = 0;
@@ -28,39 +29,55 @@ public class VisitorCI implements ASTVisitor<Expression>{
         for (int i = 0; i < li.size(); i++) {
             System.out.println(li.get(i).toString());
         }
+//        for (int i = 0; i < locations.size(); i++) {
+//            System.out.println(locations.get(i));
+//        }
     }
     @Override
     public Expression visit(AssignStmt AssSt) {
-        Location loc = AssSt.getId();
-        
+//        int indice=-1;
+        Location loc= AssSt.getId();;
+//        if (locations.contains(AssSt.getId().getId())) {
+//            indice = locations.indexOf(AssSt.getId());
+//        }else{
+//            loc = AssSt.getId();
+//        }
+//        
         AssignOpType op = AssSt.getOperator();
         Expression expr = AssSt.getExpression().accept(this);
         switch (op) {
             case AUTOIN:
                 offset -= Byte;
+                AssSt.getId().setOffset(offset);
                 loc.setOffset(offset);
-                if (loc.type==Type.INT) {
-                    li.add(new OperadorCI(listaCI.ADDINT, loc, expr, loc));
+                loc=AssSt.getId();
+                if (AssSt.getId().getType()==Type.INT) {
+                    li.add(new OperadorCI(listaCI.ADDINT, AssSt.getId(), expr,loc));
                 }else{
-                    li.add(new OperadorCI(listaCI.ADDFLOAT, loc, expr, loc));
+                    li.add(new OperadorCI(listaCI.ADDFLOAT, AssSt.getId(), expr, loc));
                 }
                 break;
             case AUTODEC:
                 offset -= Byte;
+                AssSt.getId().setOffset(offset);
                 loc.setOffset(offset);
-                if (loc.type==Type.INT) {
-                    li.add(new OperadorCI(listaCI.MINUSI, loc, expr, loc));
+                loc=AssSt.getId();
+                if (AssSt.getId().getType()==Type.INT) {
+                    li.add(new OperadorCI(listaCI.MINUSI, AssSt.getId(), expr, loc));
                 }else{
-                    li.add(new OperadorCI(listaCI.MINUSF, loc, expr, loc));
+                    li.add(new OperadorCI(listaCI.MINUSF, AssSt.getId(), expr, loc));
                 }
                 break;
             case ASSMNT:
                 offset -= Byte;
+                AssSt.getId().setOffset(offset);
                 loc.setOffset(offset);
                 Expression e=expr.accept(this);
-                li.add(new OperadorCI(listaCI.ASSMNT, loc, e, null));
+                li.add(new OperadorCI(listaCI.ASSMNT, AssSt.getId(), e, null));
                 break;
         }
+        locations.add(loc);
+//        System.out.println("1 Var: "+AssSt.getId().getId()+", OffSet: "+AssSt.getId().getOffset());
         return null;
     }
 
@@ -136,6 +153,8 @@ public class VisitorCI implements ASTVisitor<Expression>{
                 li.add(new OperadorCI(listaCI.NOT_EQ, left, right, var));
                 break;
         }
+        locations.add(var);
+//        System.out.println("2 Var: "+var.getId()+", OffSet: "+var.getOffset());
         return var;
     }
 
@@ -275,7 +294,8 @@ public class VisitorCI implements ASTVisitor<Expression>{
 
     @Override
     public Expression visit(Location loc) {
-        
+        locations.add(loc);
+//        System.out.println("3 Var: "+loc.getId()+", OffSet: "+loc.getOffset());
         return loc;
     }
 
@@ -315,6 +335,8 @@ public class VisitorCI implements ASTVisitor<Expression>{
         }else{
             li.add(new OperadorCI(listaCI.CALL, mc.getId(),res));
         }
+        locations.add(res);
+//        System.out.println("4 Var: "+res.getId()+", OffSet: "+res.getOffset());
         return res;
     }
 
@@ -362,13 +384,20 @@ public class VisitorCI implements ASTVisitor<Expression>{
                 li.add(new OperadorCI(listaCI.MIN, e, var, null));
                 break;
         }
+        locations.add(var);
+        //System.out.println("5 Var: "+var.getId()+", OffSet: "+var.getOffset());
         return var;
     }
 
     @Override
     public Expression visit(VarLocation varLoc) {
-        offset -= Byte;
-        varLoc.setOffset(offset);
+        int i =0;
+        for (int j = 0; j < locations.size(); j++) {
+            if (locations.get(j).getId().equals(varLoc.getId())) {
+                i = j;
+            }
+        }
+        varLoc.setOffset(locations.get(i).getOffset());
         return varLoc;
     }
 
