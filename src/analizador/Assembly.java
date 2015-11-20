@@ -400,8 +400,8 @@ public class Assembly {
     }
     
     private String generateCall(OperadorCI op){
-        String result="\tpushl "+varOperand(op.getOp1())+
-                      "\tcall "+varOperand(op.getOp());
+        //String result="\tpushl "+varOperand(op.getOp1())+
+        String result="\tcall "+varOperand(op.getOp());
 //        if (!(op.getOp1().getType().equals(Type.FLOAT))){
 //                result="\tmovl $0, %eax\n"+
 //                        "\tcall " + op.getOp() + "\n"+
@@ -418,35 +418,9 @@ public class Assembly {
     }
     
     private String generatePushInt(OperadorCI op){
-        int value = (Integer)((IntLiteral)op.getOp()).getValue();
-        String registro = "";
-        String result;
-        if (value>0 && value<7){
-            switch(value){
-                case 1:
-                    registro = "%rdi";
-                    break;
-                case 2:
-                    registro = "%rsi";
-                    break;
-                case 3:
-                    registro = "%rdx";
-                    break;
-                case 4:
-                    registro = "%rcx";
-                    break;
-                case 5:
-                    registro = "%r8";
-                    break;
-                case 6:
-                    registro = "%r9";
-                    break;    
-            }
-            result = "\tmovl " + varOperand(op.getOp1()) + ", " + registro+"\n";
-        }else{
-            result = "\tpushl " + varOperand(op.getOp1())+"\n";
+        String result="\tmovl "+varOperand(op.getOp())+", %eax\n" +
+                      "\tpushl %eax\n";
             pusheado++;
-        }
         return result;
     }
     
