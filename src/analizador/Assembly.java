@@ -19,7 +19,7 @@ public class Assembly {
     
     private LinkedList<OperadorCI> lista;
     private File f;
-    private int pusheado;
+    private int pusheado=0;
     private int temp;
     
     public void generateAss(String rute,String nombre, LinkedList<OperadorCI> l) throws IOException{
@@ -401,7 +401,8 @@ public class Assembly {
     
     private String generateCall(OperadorCI op){
         //String result="\tpushl "+varOperand(op.getOp1())+
-        String result="\tcall "+varOperand(op.getOp());
+        String result="\tcall "+op.getOp()+"\n"+
+                      "movl %eax,"+varOperand(op.getOp1())+"\n";
 //        if (!(op.getOp1().getType().equals(Type.FLOAT))){
 //                result="\tmovl $0, %eax\n"+
 //                        "\tcall " + op.getOp() + "\n"+
@@ -410,9 +411,9 @@ public class Assembly {
 //                result="\tcall " + op.getOp() + "\n"+
 //                        "\tmovl %xmm0," + varOperand(op.getOp1())+"\n";
 //        }
-        if (pusheado%2 != 0){
-            result += "\taddl $8, %rsp\n";  
-        }
+//        if (pusheado%2 != 0){
+            result += "\taddl $"+pusheado*4+", %rsp\n";  
+//        }
         pusheado=0;
         return result;
     }
@@ -420,7 +421,7 @@ public class Assembly {
     private String generatePushInt(OperadorCI op){
         String result="\tmovl "+varOperand(op.getOp())+", %eax\n" +
                       "\tpushl %eax\n";
-            pusheado++;
+        pusheado++;
         return result;
     }
     
