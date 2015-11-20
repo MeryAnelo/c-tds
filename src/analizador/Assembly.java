@@ -400,15 +400,16 @@ public class Assembly {
     }
     
     private String generateCall(OperadorCI op){
-        String result;
-        if (!(op.getOp1().getType().equals(Type.FLOAT))){
-                result="\tmovl $0, %eax\n"+
-                        "\tcall " + op.getOp() + "\n"+
-                        "\tmovl %eax," + varOperand(op.getOp1())+"\n";
-        }else{
-                result="\tcall " + op.getOp() + "\n"+
-                        "\tmovl %xmm0," + varOperand(op.getOp1())+"\n";
-        }
+        String result="\tpushl "+varOperand(op.getOp1())+
+                      "\tcall "+varOperand(op.getOp());
+//        if (!(op.getOp1().getType().equals(Type.FLOAT))){
+//                result="\tmovl $0, %eax\n"+
+//                        "\tcall " + op.getOp() + "\n"+
+//                        "\tmovl %eax," + varOperand(op.getOp1())+"\n";
+//        }else{
+//                result="\tcall " + op.getOp() + "\n"+
+//                        "\tmovl %xmm0," + varOperand(op.getOp1())+"\n";
+//        }
         if (pusheado%2 != 0){
             result += "\taddl $8, %rsp\n";  
         }
@@ -417,8 +418,7 @@ public class Assembly {
     }
     
     private String generatePushInt(OperadorCI op){
-        System.out.println("---------"+ ((IntLiteral)op.getOp()).getValue());
-        int value = ((IntLiteral)op.getOp()).getValue();
+        int value = (Integer)((IntLiteral)op.getOp()).getValue();
         String registro = "";
         String result;
         if (value>0 && value<7){
@@ -444,7 +444,7 @@ public class Assembly {
             }
             result = "\tmovl " + varOperand(op.getOp1()) + ", " + registro+"\n";
         }else{
-            result = "\tpush " + varOperand(op.getOp1())+"\n";
+            result = "\tpushl " + varOperand(op.getOp1())+"\n";
             pusheado++;
         }
         return result;
