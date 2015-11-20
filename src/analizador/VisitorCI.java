@@ -222,7 +222,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
             }else{
                 li.add(new OperadorCI(listaCI.LABEL,dec.getMethod().get(i).getId()+":"));
                 dec.getMethod().get(i).accept(this);
-                li.add(new OperadorCI(listaCI.LABEL,"End-Method: "+dec.getMethod().get(i).getId()));
+                li.add(new OperadorCI(listaCI.LABEL,"End_Method: "+dec.getMethod().get(i).getId()));
             }
             i++;
         }
@@ -261,15 +261,15 @@ public class VisitorCI implements ASTVisitor<Expression>{
         }else{
             e=forSt.getForBlock().accept(this);
         }
-        li.add(new OperadorCI(listaCI.JUMP_FALSE, "end-for"+auxE,e));
+        li.add(new OperadorCI(listaCI.JUMP_FALSE, "end_for: "+auxE,e));
         count++;
         
-        pila.addFirst(new Pair("for"+auxW,"end-for"+auxE));
+        pila.addFirst(new Pair("for"+auxW,"end_for: "+auxE));
         if(forSt.getStatement()!=null){
             forSt.getStatement().accept(this);
         }
         li.add(new OperadorCI(listaCI.JUMP, "for"+auxW));
-        li.add(new OperadorCI(listaCI.LABEL,"end-for"+auxE));
+        li.add(new OperadorCI(listaCI.LABEL,"end_for"+auxE+":"));
         pila.removeFirst();
         return null;
     }
@@ -277,19 +277,19 @@ public class VisitorCI implements ASTVisitor<Expression>{
     @Override
     public Expression visit(IfStmt ifSt) {
         VarLocation v = (VarLocation)ifSt.getCondition().accept(this);
-        li.add(new OperadorCI(listaCI.JUMP_FALSE, "else-if"+count,v));
+        li.add(new OperadorCI(listaCI.JUMP_FALSE, "else_if"+count,v));
         Integer aux = count;
         count++;
         ifSt.getIfBlock().accept(this);
-        li.add(new OperadorCI(listaCI.JUMP, "end-if"+count));
+        li.add(new OperadorCI(listaCI.JUMP, "end_if"+count));
         Integer aux2 = count;
         count++;
-        li.add(new OperadorCI(listaCI.LABEL, "else-if"+aux.toString()));
+        li.add(new OperadorCI(listaCI.LABEL, "else_if"+aux.toString()+":"));
         if (ifSt.getElseBlock()!= null) {
             ifSt.getElseBlock().accept(this);
         }
         
-        li.add(new OperadorCI(listaCI.LABEL, "end-if"+aux2));
+        li.add(new OperadorCI(listaCI.LABEL, "end_if"+aux2+":"));
         return null;
     }
 
@@ -418,12 +418,12 @@ public class VisitorCI implements ASTVisitor<Expression>{
         count++;
         VarLocation v = (VarLocation)whileSt.getCondition().accept(this);
         int auxE = count;
-        li.add(new OperadorCI(listaCI.JUMP_FALSE, "end-while"+auxE,v));
+        li.add(new OperadorCI(listaCI.JUMP_FALSE, "end_while"+auxE,v));
         count++;
-        pila.addFirst(new Pair("while"+auxW,"end-while"+auxE));
+        pila.addFirst(new Pair("while"+auxW,"end_while"+auxE+":"));
         whileSt.getStatement().accept(this);
         li.add(new OperadorCI(listaCI.JUMP, "while"+auxW));
-        li.add(new OperadorCI(listaCI.LABEL,"end-while"+auxE));
+        li.add(new OperadorCI(listaCI.LABEL,"end_while"+auxE+":"));
         pila.removeFirst();
         return null;
     }

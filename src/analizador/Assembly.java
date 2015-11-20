@@ -439,14 +439,14 @@ public class Assembly {
     }
     
     private String generateJump(OperadorCI op){
-                String result= "jmp ." + op.getOp()+"\n";
+                String result= "\tjmp " + op.getS()+"\n";
                 return result;
         }
     
     private String generateJumpFalse(OperadorCI op){
             String result="\tmovl " + varOperand(op.getOp()) + ", %eax\n"+
                             "\tcmpl $0, %eax\n"+
-                            "je ." + op.getOp1()+"\n";
+                            "\tje " + op.getS()+"\n";
             return result;
     }
     
