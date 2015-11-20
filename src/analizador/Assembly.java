@@ -419,8 +419,7 @@ public class Assembly {
     }
     
     private String generatePushInt(OperadorCI op){
-        String result="\tmovl "+varOperand(op.getOp())+", %eax\n" +
-                      "\tmovl %eax,"+varOperand(op.getOp1())+"\n"+
+        String result="\tmovl "+varOperand(op.getOp1())+", %eax\n"+
                       "\tpushl %eax\n";
         pusheado++;
         return result;
