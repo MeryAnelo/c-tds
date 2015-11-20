@@ -18,6 +18,7 @@ main:
 	movl %eax, -16(%ebp)
 	movl 0(%ebp), %eax
 	pushl %eax
+        call print_int
 	nop
 	leave
 	ret

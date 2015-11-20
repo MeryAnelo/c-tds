@@ -1,5 +1,5 @@
 class Main {
-    void printI(int i)extern;
+    void print_int(int i)extern;
 
     void main(){ 
         int n1,n2,res;
