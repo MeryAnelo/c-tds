@@ -14,7 +14,7 @@ import java.util.LinkedList;
 public class VisitorCI implements ASTVisitor<Expression>{
 
     LinkedList<String> methodsExtern = new LinkedList();
-    LinkedList<Location> locations = new LinkedList();
+    static LinkedList<Location> locations = new LinkedList();
     LinkedList<OperadorCI> li = new LinkedList();
     LinkedList<Pair> pila = new LinkedList();
     int count = 0;
@@ -25,6 +25,17 @@ public class VisitorCI implements ASTVisitor<Expression>{
         return li;
     }
     
+    public static Location buscarLoc(String s){
+        Location l=null;
+        boolean encontre = false;
+        for (int i = 0; i < locations.size() & !encontre; i++) {
+            if (locations.get(i).getId().equals(s)) {
+                encontre = true;
+                l = locations.get(i);
+            }
+        }
+        return l;
+    }
     public void print(){
         for (int i = 0; i < li.size(); i++) {
             System.out.println(li.get(i).toString());
@@ -317,13 +328,16 @@ public class VisitorCI implements ASTVisitor<Expression>{
         for (int i = 0; i < l.size(); i++) {
             //System.out.println("Metodo: "+mc.getId()+" Parametro Nª: "+i+" Tamaño Parametro: "+l.size());
             expr = l.get(i);
-            System.out.println("METODO: "+mc.getId()+" Parametro Nª: "+expr.toString()+" Tipo: "+expr.getType());
+            //System.out.println("METODO: "+mc.getId()+" Parametro Nª: "+expr.toString()+" Tipo: "+expr.getType());
+            Location location = buscarLoc(expr.toString());
+            //System.out.println(location.toString()+" OffSet:"+location.getOffset());
             if (expr.getType()==Type.INT || expr.getType()==Type.BOOLEAN) {
                 expr.setType(Type.INT);
                 System.out.println("Metodo: "+mc.getId()+" Push Nª: "+expr.toString());
-                li.add(new OperadorCI(listaCI.PUSHI,expr,null,null));
+                Location loc = locations.get(0);
+                li.add(new OperadorCI(listaCI.PUSHI,expr,location,null));
             }else if(expr.getType()==Type.FLOAT){
-                li.add(new OperadorCI(listaCI.PUSHF,expr,null,null));
+                li.add(new OperadorCI(listaCI.PUSHF,expr,location,null));
             }
         }
         VarLocation res = new VarLocation("temp"+count,null);

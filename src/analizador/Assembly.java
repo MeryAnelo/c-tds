@@ -28,8 +28,8 @@ public class Assembly {
         f = new File(rute,nombre);
         try{
             FileWriter w = new FileWriter(f);
-            w.write(".globl  main\n");
             w.write(".type main, @function\n");
+            w.write(".globl  main\n");
             //PrintWriter wr = new PrintWriter(w);
             //aca el swich
             listaCI op;
