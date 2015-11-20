@@ -32,18 +32,6 @@ jmp .endEqual0
 	movl %eax,-24(%ebp)
 	addl $0, %esp
 	jmp end_if4
-else_if2:
-	pushl %ebp
-	movl %esp, %ebp
-	subl $16, %esp
-end_if4:
-	pushl %ebp
-	movl %esp, %ebp
-	subl $16, %esp
 	nop
 	leave
 	ret
-End_Method: main
-	pushl %ebp
-	movl %esp, %ebp
-	subl $16, %esp

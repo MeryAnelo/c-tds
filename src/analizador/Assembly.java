@@ -128,12 +128,18 @@ public class Assembly {
                         w.write(generatePushFloat(gen));
                         break;
                     case LABEL:
-                        if (!gen.getS().contains("Extern: ") && !gen.getS().contains("End-Method")) {
+                        if (gen.getS().contains("Main:") || gen.getS().contains("main:") || gen.getS().contains("MAIN:")) {
                             w.write(gen.getS()+"\n"+
                                 "\tpushl %ebp\n"+
                                 "\tmovl %esp, %ebp\n"+
                                 "\tsubl $16, %esp\n");
                         }
+//                        if (!gen.getS().contains("Extern: ") && !gen.getS().contains("End-Method:")) {
+//                            w.write(gen.getS()+"\n"+
+//                                "\tpushl %ebp\n"+
+//                                "\tmovl %esp, %ebp\n"+
+//                                "\tsubl $16, %esp\n");
+//                        }
                         
                         break;
                 }
