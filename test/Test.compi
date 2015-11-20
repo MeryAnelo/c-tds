@@ -6,7 +6,7 @@ class Main {
         n1=10;
         n2=2;
         res=n1/n2;
-        printI(res);
+        print_int(res);
         
         return;
     }

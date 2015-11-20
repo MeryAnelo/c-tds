@@ -1,5 +1,5 @@
-.globl  main
 .type main, @function
+.globl  main
 main:
 	pushl %ebp
 	movl %esp, %ebp
@@ -17,8 +17,11 @@ main:
 	movl -12(%ebp), %eax 
 	movl %eax, -16(%ebp)
 	movl 0(%ebp), %eax
+	movl %eax,-16(%ebp)
 	pushl %eax
-        call print_int
+	call print_int
+	movl %eax,-20(%ebp)
+	addl $4, %esp
 	nop
 	leave
 	ret
