@@ -6,8 +6,9 @@ class Main {
         n1=10;
         n2=2;
         res=n1/n2;
-        print_int(res);
-        
+        if(x==5){
+            print_int(res);
+        } 
         return;
     }
 	

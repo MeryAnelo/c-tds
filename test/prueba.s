@@ -8,35 +8,26 @@
 main:
 .LFB0:
 	.cfi_startproc
-	pushl	%ebp
-	.cfi_def_cfa_offset 8
-	.cfi_offset 5, -8
-	movl	%esp, %ebp
-	.cfi_def_cfa_register 5
-	andl	$-16, %esp
-	subl	$32, %esp
-	movl	$10, 20(%esp)
-	movl	$5, 24(%esp)
-	movl	24(%esp), %eax
-	movl	20(%esp), %edx
-	addl	%edx, %eax
-	movl	%eax, 28(%esp)
-	movl	28(%esp), %eax
-	movl	%eax, 4(%esp)
-	movl	$.LC0, (%esp)
-	call	printf
-	movl	20(%esp), %eax
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	subq	$16, %rsp
+	movl	$10, -12(%rbp)
+	movl	$2, -8(%rbp)
+	movl	-12(%rbp), %eax
 	cltd
-	idivl	24(%esp)
-	movl	%eax, 28(%esp)
-	movl	28(%esp), %eax
-	movl	%eax, 4(%esp)
-	movl	$.LC0, (%esp)
+	idivl	-8(%rbp)
+	movl	%eax, -4(%rbp)
+	movl	-4(%rbp), %eax
+	movl	%eax, %esi
+	movl	$.LC0, %edi
+	movl	$0, %eax
 	call	printf
 	nop
 	leave
-	.cfi_restore 5
-	.cfi_def_cfa 4, 4
+	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
 .LFE0:
