@@ -108,21 +108,21 @@ public class VisitorCI implements ASTVisitor<Expression>{
                 }
                 break;
             case MULT:
-                if (left.getClass().equals(Integer.class)) {
+                if (left.getType()==Type.INT) {
                     li.add(new OperadorCI(listaCI.MULTI, left, right, var));
                 }else{
                     li.add(new OperadorCI(listaCI.MULTF, left, right, var));
                 }
                 break;
             case DIVIDE:
-                if (left.getClass().equals(Integer.class)) {
+                if (left.getType()==Type.INT) {
                     li.add(new OperadorCI(listaCI.DIVIDEI, left, right, var));
                 }else{
                     li.add(new OperadorCI(listaCI.DIVIDEF, left, right, var));
                 }
                 break;
             case DIV:
-                if (left.getClass().equals(Integer.class)) {
+                if (left.getType()==Type.INT) {
                     li.add(new OperadorCI(listaCI.MODI, left, right, var));
                 }else{
                     li.add(new OperadorCI(listaCI.MODF, left, right, var));
@@ -205,7 +205,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
         int i=0;
         while (i < dec.getMethod().size()){
             if (dec.getMethod().get(i).getBlock().getField()==null && dec.getMethod().get(i).getBlock().getStatements()==null){
-                li.add(new OperadorCI(listaCI.LABEL,dec.getMethod().get(i).getId()+":"));
+                li.add(new OperadorCI(listaCI.LABEL,"Extern: "+dec.getMethod().get(i).getId()+":"));
                 dec.getMethod().get(i).setExtern(true);
                 methodsExtern.add(dec.getMethod().get(i).getId());
             }else{

@@ -1,8 +1,6 @@
-.printI:
-pushl %ebp
-movl %esp, %ebp
-subl $16, %esp
-.main:
+.globl  main
+.type main, @function
+main:
 pushl %ebp
 movl %esp, %ebp
 subl $16, %esp
@@ -19,7 +17,3 @@ movl %eax, -16(%ebp)
 nop
 leave
 ret
-.End-Method: main
-pushl %ebp
-movl %esp, %ebp
-subl $16, %esp

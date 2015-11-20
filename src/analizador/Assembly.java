@@ -28,6 +28,8 @@ public class Assembly {
         f = new File(rute,nombre);
         try{
             FileWriter w = new FileWriter(f);
+            w.write(".globl  main\n");
+            w.write(".type main, @function\n");
             //PrintWriter wr = new PrintWriter(w);
             //aca el swich
             listaCI op;
@@ -126,10 +128,13 @@ public class Assembly {
                         w.write(generatePushFloat(gen));
                         break;
                     case LABEL:
-                        w.write("." + gen.getS()+"\n"+
+                        if (!gen.getS().contains("Extern: ") && !gen.getS().contains("End-Method")) {
+                            w.write(gen.getS()+"\n"+
                                 "pushl %ebp\n"+
                                 "movl %esp, %ebp\n"+
                                 "subl $16, %esp\n");
+                        }
+                        
                         break;
                 }
                 System.out.println(i+" < "+lista.size());
@@ -208,7 +213,8 @@ public class Assembly {
     
     private String generateMultInt(OperadorCI op){
         String result = "movl " + varOperand(op.getOp()) + ", %eax\n"+
-                        "imull " + varOperand(op.getOp1()) + ", %eax\n"+
+                        "movl " + varOperand(op.getOp1()) + ", %edx\n"+
+                        "imull " + "%edx" + ", %eax\n"+
                         "movl  %eax,  " + varOperand(op.getOp2())+"\n";
         return result;
     }
@@ -397,9 +403,9 @@ public class Assembly {
     private String generateCall(OperadorCI op){
         String result;
         if (!(op.getOp1().getType().equals(Type.FLOAT))){
-                result="movl $0, %rax\n"+
+                result="movl $0, %eax\n"+
                         "call " + op.getOp() + "\n"+
-                        "movl %rax," + varOperand(op.getOp1())+"\n";
+                        "movl %eax," + varOperand(op.getOp1())+"\n";
         }else{
                 result="call " + op.getOp() + "\n"+
                         "movl %xmm0," + varOperand(op.getOp1())+"\n";
