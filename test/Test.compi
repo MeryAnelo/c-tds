@@ -6,9 +6,11 @@ class Main {
         n1=10;
         n2=2;
         res=n1/n2;
-        if(x==5){
+        if(res==5){
             print_int(res);
-        } 
+        }else{
+            print_int(n1);
+        }
         return;
     }
 	

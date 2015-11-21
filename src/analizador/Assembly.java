@@ -133,15 +133,12 @@ public class Assembly {
                                 "\tpushl %ebp\n"+
                                 "\tmovl %esp, %ebp\n"+
                                 "\tsubl $16, %esp\n");
-                        }else{
+                        }
+                        if (!gen.getS().contains("Extern: ") && !gen.getS().contains("End_Method:") && 
+                                !gen.getS().contains("Main:") && !gen.getS().contains("main:") && !gen.getS().contains("MAIN:")) {
+                            
                             w.write(gen.getS()+"\n");
                         }
-//                        if (!gen.getS().contains("Extern: ") && !gen.getS().contains("End-Method:")) {
-//                            w.write(gen.getS()+"\n"+
-//                                "\tpushl %ebp\n"+
-//                                "\tmovl %esp, %ebp\n"+
-//                                "\tsubl $16, %esp\n");
-//                        }
                         
                         break;
                 }

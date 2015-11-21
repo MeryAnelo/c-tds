@@ -1,6 +1,5 @@
 .type main, @function
 .globl  main
-Extern: print_int:
 main:
 	pushl %ebp
 	movl %esp, %ebp
@@ -18,7 +17,7 @@ main:
 	movl -12(%ebp), %eax 
 	movl %eax, -16(%ebp)
 Equal0:
-	movl -4(%ebp), %eax
+	movl -16(%ebp), %eax
 	cmpl $5, %eax
 je equals0
 	movl $0, -20(%ebp)
@@ -29,13 +28,17 @@ endEqual0:
 	movl -20(%ebp), %eax
 	cmpl $0, %eax
 	je else_if2
+	movl -16(%ebp), %eax
+	pushl %eax
 	call print_int
 	movl %eax,-24(%ebp)
-	addl $0, %esp
+	addl $4, %esp
 	jmp end_if4
 else_if2:
+	call print_int
+	movl %eax,-28(%ebp)
+	addl $0, %esp
 end_if4:
 	nop
 	leave
 	ret
-End_Method: main
