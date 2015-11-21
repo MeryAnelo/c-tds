@@ -325,20 +325,24 @@ public class VisitorCI implements ASTVisitor<Expression>{
     public Expression visit(MethodCall mc) {
         LinkedList<Expression> l = mc.getlParam();
         Expression expr;
+//        for (int i = 0; i < l.size(); i++) {
+//            expr = l.get(i);
+//            Location location = buscarLoc(expr.toString());
+//            if (expr.getType()==Type.INT || expr.getType()==Type.BOOLEAN) {
+//                expr.setType(Type.INT);
+//                System.out.println("Metodo: "+mc.getId()+" Push Nª: "+expr.toString());
+//                Location loc = locations.get(0);
+//                li.add(new OperadorCI(listaCI.PUSHI,expr,location,null));
+//            }else if(expr.getType()==Type.FLOAT){
+//                li.add(new OperadorCI(listaCI.PUSHF,expr,location,null));
+//            }
+//        }
         for (int i = 0; i < l.size(); i++) {
-            //System.out.println("Metodo: "+mc.getId()+" Parametro Nª: "+i+" Tamaño Parametro: "+l.size());
             expr = l.get(i);
-            //System.out.println("METODO: "+mc.getId()+" Parametro Nª: "+expr.toString()+" Tipo: "+expr.getType());
             Location location = buscarLoc(expr.toString());
-            //System.out.println(location.toString()+" OffSet:"+location.getOffset());
-            if (expr.getType()==Type.INT || expr.getType()==Type.BOOLEAN) {
-                expr.setType(Type.INT);
-                System.out.println("Metodo: "+mc.getId()+" Push Nª: "+expr.toString());
-                Location loc = locations.get(0);
-                li.add(new OperadorCI(listaCI.PUSHI,expr,location,null));
-            }else if(expr.getType()==Type.FLOAT){
-                li.add(new OperadorCI(listaCI.PUSHF,expr,location,null));
-            }
+            System.out.println("Metodo: "+mc.getId()+" Push Nª: "+expr.toString());
+            Location loc = locations.get(0);
+            li.add(new OperadorCI(listaCI.PUSHI,expr,location,null));
         }
         VarLocation res = new VarLocation("temp"+count,null);
         count++;

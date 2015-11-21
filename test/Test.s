@@ -35,9 +35,11 @@ endEqual0:
 	addl $4, %esp
 	jmp end_if4
 else_if2:
+	movl -4(%ebp), %eax
+	pushl %eax
 	call print_int
 	movl %eax,-28(%ebp)
-	addl $0, %esp
+	addl $4, %esp
 end_if4:
 	nop
 	leave
