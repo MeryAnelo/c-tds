@@ -1,5 +1,6 @@
 .type main, @function
 .globl  main
+Extern: print_int:
 main:
 	pushl %ebp
 	movl %esp, %ebp
@@ -16,15 +17,15 @@ main:
 	movl  %eax, -12(%ebp)
 	movl -12(%ebp), %eax 
 	movl %eax, -16(%ebp)
-.Equal0:
+Equal0:
 	movl -4(%ebp), %eax
 	cmpl $5, %eax
-je .equals0
+je equals0
 	movl $0, -20(%ebp)
-jmp .endEqual0
-.equals0:
+jmp endEqual0
+equals0:
 	movl $1, -20(%ebp)
-.endEqual0:
+endEqual0:
 	movl -20(%ebp), %eax
 	cmpl $0, %eax
 	je else_if2
@@ -32,6 +33,9 @@ jmp .endEqual0
 	movl %eax,-24(%ebp)
 	addl $0, %esp
 	jmp end_if4
+else_if2:
+end_if4:
 	nop
 	leave
 	ret
+End_Method: main

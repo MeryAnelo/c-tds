@@ -133,6 +133,8 @@ public class Assembly {
                                 "\tpushl %ebp\n"+
                                 "\tmovl %esp, %ebp\n"+
                                 "\tsubl $16, %esp\n");
+                        }else{
+                            w.write(gen.getS()+"\n");
                         }
 //                        if (!gen.getS().contains("Extern: ") && !gen.getS().contains("End-Method:")) {
 //                            w.write(gen.getS()+"\n"+
@@ -356,15 +358,15 @@ public class Assembly {
     private String generateEq(OperadorCI op){
         String temporalId = ""+temp;
         temp++;
-        String result= ".Equal" + temporalId + ":\n"+
+        String result= "Equal" + temporalId + ":\n"+
                         "\tmovl " + varOperand(op.getOp()) + ", %eax\n"+
                         "\tcmpl " + varOperand(op.getOp1()) + ", %eax\n"+
-                        "je .equals" + temporalId + "\n"+
+                        "je equals" + temporalId + "\n"+
                         "\tmovl $0, " + varOperand(op.getOp2()) + "\n"+
-                        "jmp .endEqual" + temporalId + "\n"+ 
-                        ".equals" + temporalId + ":\n"+
+                        "jmp endEqual" + temporalId + "\n"+ 
+                        "equals" + temporalId + ":\n"+
                         "\tmovl $1, " + varOperand(op.getOp2()) + "\n"+
-                        ".endEqual" + temporalId + ":\n";
+                        "endEqual" + temporalId + ":\n";
         return result;
     }
     
