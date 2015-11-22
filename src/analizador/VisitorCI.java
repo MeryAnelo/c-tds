@@ -62,22 +62,24 @@ public class VisitorCI implements ASTVisitor<Expression>{
                 AssSt.getId().setOffset(offset);
                 loc.setOffset(offset);
                 loc=AssSt.getId();
-                if (AssSt.getId().getType()==Type.INT) {
-                    li.add(new OperadorCI(listaCI.ADDINT, AssSt.getId(), expr,loc));
-                }else{
-                    li.add(new OperadorCI(listaCI.ADDFLOAT, AssSt.getId(), expr, loc));
-                }
+                li.add(new OperadorCI(listaCI.ADDINT, AssSt.getId(), expr,loc));
+//                if (AssSt.getId().getType()==Type.INT) {
+//                    li.add(new OperadorCI(listaCI.ADDINT, AssSt.getId(), expr,loc));
+//                }else{
+//                    li.add(new OperadorCI(listaCI.ADDFLOAT, AssSt.getId(), expr, loc));
+//                }
                 break;
             case AUTODEC:
                 offset -= Byte;
                 AssSt.getId().setOffset(offset);
                 loc.setOffset(offset);
                 loc=AssSt.getId();
-                if (AssSt.getId().getType()==Type.INT) {
-                    li.add(new OperadorCI(listaCI.MINUSI, AssSt.getId(), expr, loc));
-                }else{
-                    li.add(new OperadorCI(listaCI.MINUSF, AssSt.getId(), expr, loc));
-                }
+                li.add(new OperadorCI(listaCI.MINUSI, AssSt.getId(), expr, loc));
+//                if (AssSt.getId().getType()==Type.INT) {
+//                    li.add(new OperadorCI(listaCI.MINUSI, AssSt.getId(), expr, loc));
+//                }else{
+//                    li.add(new OperadorCI(listaCI.MINUSF, AssSt.getId(), expr, loc));
+//                }
                 break;
             case ASSMNT:
                 offset -= Byte;
@@ -105,39 +107,44 @@ public class VisitorCI implements ASTVisitor<Expression>{
         var.setType(left.getType());
         switch (op) {
             case MINUS:
-                if (left.getType()==Type.INT) {
-                    li.add(new OperadorCI(listaCI.MINUSI, left, right, var));
-                }else{
-                    li.add(new OperadorCI(listaCI.MINUSF, left, right, var));
-                }
+                li.add(new OperadorCI(listaCI.MINUSI, left, right, var));
+//                if (left.getType()==Type.INT) {
+//                    li.add(new OperadorCI(listaCI.MINUSI, left, right, var));
+//                }else{
+//                    li.add(new OperadorCI(listaCI.MINUSF, left, right, var));
+//                }
                 break;
             case PLUS:
-                if (left.getType()==Type.INT) {
-                    li.add(new OperadorCI(listaCI.ADDINT, left, right, var));
-                }else{
-                    li.add(new OperadorCI(listaCI.ADDFLOAT, left, right, var));
-                }
+                li.add(new OperadorCI(listaCI.ADDINT, left, right, var));
+//                if (left.getType()==Type.INT) {
+//                    li.add(new OperadorCI(listaCI.ADDINT, left, right, var));
+//                }else{
+//                    li.add(new OperadorCI(listaCI.ADDFLOAT, left, right, var));
+//                }
                 break;
             case MULT:
-                if (left.getType()==Type.INT) {
-                    li.add(new OperadorCI(listaCI.MULTI, left, right, var));
-                }else{
-                    li.add(new OperadorCI(listaCI.MULTF, left, right, var));
-                }
+                li.add(new OperadorCI(listaCI.MULTI, left, right, var));
+//                if (left.getType()==Type.INT) {
+//                    li.add(new OperadorCI(listaCI.MULTI, left, right, var));
+//                }else{
+//                    li.add(new OperadorCI(listaCI.MULTF, left, right, var));
+//                }
                 break;
             case DIVIDE:
-                if (left.getType()==Type.INT) {
-                    li.add(new OperadorCI(listaCI.DIVIDEI, left, right, var));
-                }else{
-                    li.add(new OperadorCI(listaCI.DIVIDEF, left, right, var));
-                }
+                li.add(new OperadorCI(listaCI.DIVIDEI, left, right, var));
+//                if (left.getType()==Type.INT) {
+//                    li.add(new OperadorCI(listaCI.DIVIDEI, left, right, var));
+//                }else{
+//                    li.add(new OperadorCI(listaCI.DIVIDEF, left, right, var));
+//                }
                 break;
             case DIV:
-                if (left.getType()==Type.INT) {
-                    li.add(new OperadorCI(listaCI.MODI, left, right, var));
-                }else{
-                    li.add(new OperadorCI(listaCI.MODF, left, right, var));
-                }
+                li.add(new OperadorCI(listaCI.MODI, left, right, var));
+//                if (left.getType()==Type.INT) {
+//                    li.add(new OperadorCI(listaCI.MODI, left, right, var));
+//                }else{
+//                    li.add(new OperadorCI(listaCI.MODF, left, right, var));
+//                }
                 break;
             case AND:
                 li.add(new OperadorCI(listaCI.AND, left, right, var));
