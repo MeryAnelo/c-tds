@@ -229,7 +229,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
             }else{
                 li.add(new OperadorCI(listaCI.LABEL,dec.getMethod().get(i).getId()+":"));
                 dec.getMethod().get(i).accept(this);
-                li.add(new OperadorCI(listaCI.LABEL,"end_Method: "+dec.getMethod().get(i).getId()));
+                li.add(new OperadorCI(listaCI.LABEL,"End_Method: "+dec.getMethod().get(i).getId()));
             }
             i++;
         }
