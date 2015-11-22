@@ -2,14 +2,11 @@ class Main {
     void print_int(int i)extern;
 
     void main(){ 
-        int n1,n2,res;
-        n1=10;
-        n2=2;
-        res=n1/n2;
-        if(res==5){
-            print_int(res);
-        }else{
-            print_int(n1);
+        int i;
+        i=0;
+        while (i<10){
+            print_int(i);
+            i = i +1;
         }
         return;
     }
