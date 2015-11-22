@@ -431,10 +431,10 @@ public class VisitorCI implements ASTVisitor<Expression>{
         int auxE = count;
         li.add(new OperadorCI(listaCI.JUMP_FALSE, "end_while"+auxE,v));
         count++;
-        pila.addFirst(new Pair("while"+auxW,"end_while"+auxE+":"));
+        pila.addFirst(new Pair("while"+auxW,"end_while"+auxE));
         whileSt.getStatement().accept(this);
         li.add(new OperadorCI(listaCI.JUMP, "while"+auxW));
-        li.add(new OperadorCI(listaCI.LABEL,"end_while"+auxE+":"));
+        li.add(new OperadorCI(listaCI.LABEL,"end_while"+auxE));
         pila.removeFirst();
         return null;
     }

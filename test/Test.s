@@ -25,11 +25,9 @@ endLess0:
 	movl %eax,-12(%ebp)
 	addl $4, %esp
 	movl -4(%ebp), %eax
-	movl %eax, %xmm0
-	movl $1, %eax
-	movl %eax, %xmm1
-	addss %xmm1, %xmm0
-	movl %xmm0, -16(%ebp)
+	movl $1, %edx
+	addl %edx, %eax
+	movl %eax, -16(%ebp)
 	movl -16(%ebp), %eax 
 	movl %eax, -20(%ebp)
 	jmp while0
