@@ -36,10 +36,10 @@ public class Assembly {
             for (int i = 0; i < lista.size(); i++) {
                 op = lista.get(i).getNom();
                 OperadorCI gen=lista.get(i);
-                System.out.println("--"+lista.get(i).getNom()+"="+op);
+//                System.out.println("--"+lista.get(i).getNom()+"="+op);
                 switch (op){
                     case ADDINT:
-                       w.write(generateAddInt(gen));
+                       w.write("//suma\n"+generateAddInt(gen)+"\n");
                        break;
                     case ADDFLOAT:
                         w.write(generateAddFloat(gen));
@@ -72,7 +72,7 @@ public class Assembly {
                         w.write(generateGtr(gen));
                         break;
                     case LESS:
-                        w.write(generateLess(gen));
+                        w.write("//less\n"+generateLess(gen)+"\n");
                         break;
                     case LESS_EQ:
                         w.write(generateLessEq(gen));
@@ -114,7 +114,7 @@ public class Assembly {
                         w.write(generateJump(gen));
                         break;
                     case JUMP_FALSE:
-                        w.write(generateJumpFalse(gen));
+                        w.write("//false\n"+generateJumpFalse(gen)+"//jfalse\n");
                     case BREAK:
                         break;
                         //aca no hacer nada
@@ -122,7 +122,7 @@ public class Assembly {
                         break;
                         //aca no hacer nada
                     case PUSHI:
-                        w.write(generatePushInt(gen));
+                        w.write("\n//push\n"+generatePushInt(gen)+"//pushend\n");
                         break;
                     case PUSHF:
                         w.write(generatePushFloat(gen));
@@ -134,15 +134,15 @@ public class Assembly {
                                 "\tmovl %esp, %ebp\n"+
                                 "\tsubl $16, %esp\n");
                         }
-                        if (!gen.getS().contains("Extern: ") && !gen.getS().contains("End_Method:") && 
-                                !gen.getS().contains("Main:") && !gen.getS().contains("main:") && !gen.getS().contains("MAIN:")) {
-                            
+                        if (!gen.getS().contains("Extern: ") && !gen.getS().contains("end_Method:") && 
+                                (!gen.getS().contains("Main:") && !gen.getS().contains("main:") && !gen.getS().contains("MAIN:"))) {
+                            System.out.println("SHUT");
                             w.write(gen.getS()+":"+"\n");
                         }
                         
                         break;
                 }
-                System.out.println(i+" < "+lista.size());
+//                System.out.println(i+" < "+lista.size());
             }
             w.close();
             
@@ -247,7 +247,8 @@ public class Assembly {
     }
     
     private String generateAssmnt(OperadorCI op){
-        
+//        "\tmovl " + calculateOffset(loc) + ", %eax"
+//            " \tmovl %eax, " + calculateOffset(res)
         String result=  "\tmovl "+ varOperand(op.getOp1()) + ", %eax \n"+
                         "\tmovl " + "%eax" +", "+varOperand(op.getOp())+"\n";
         return result;
@@ -266,96 +267,65 @@ public class Assembly {
     private String generateGtr (OperadorCI op){
         String temporalId = ""+temp;
         temp++;
-        String result = "gtr" + temporalId + ":\n"+
-                 "\tmovl " + varOperand(op.getOp()) + ", %eax\n"+
-                 "\tcmpl " + varOperand(op.getOp1()) + ", %eax\n"+
+        String result = //"gtr" + temporalId + ":\n"+
+                 "\tmovl " + varOperand(op.getOp1()) + ", %eax\n"+
+                 "\tcmpl " + varOperand(op.getOp()) + ", %eax\n"+
                  "jg isGtr" + temporalId + "\n"+
                  "\tmovl $0, " + varOperand(op.getOp2()) + "\n"+
                  "jmp endGtr" + temporalId + "\n"+
                  "isGtr" + temporalId + ":\n"+
                  "\tmovl $1, " + varOperand(op.getOp2()) + "\n"+
                  "endGtr" + temporalId + ":\n";
-        /*
-        **preguntar si esta bien
-        */
-        
-        
         return result;        
     }
     
     private String generateLess(OperadorCI op){
         String temporalId = ""+temp;
         temp++;
-        String result = "less" + temporalId + ":\n"+
-                  "\tmovl " + varOperand(op.getOp()) + ", %eax\n";
-        if (op.getOp().getType().equals(Type.FLOAT)){
-            result += "\tmovl %eax, %xmm0\n"+
-                      "\tmovl " + varOperand(op.getOp1()) + ", %eax\n"+
-                      "\tmovl %eax, %xmm1\n"+
-                      "\tucomiss %xmm0, %xmm1\n"+
-                      "ja isLess" + temporalId + "\n";
-        }else{
-            result += "\tcmpl " + varOperand(op.getOp1()) + ", %eax\n"+
-                      "jl isLess" + temporalId + "\n";
-        }
-        result += "\tmovl $0, " + varOperand(op.getOp2()) + "\n"+
-                  "jmp endLess" + temporalId + "\n"+ 
-                  "isLess" + temporalId + ":\n"+
-                  "\tmovl $1, " + varOperand(op.getOp2()) + "\n"+
-                  "endLess" + temporalId + ":\n";
+        
+        String result= "\tmovl " + varOperand(op.getOp()) + ", %eax\n"+
+                    "\tcmpl " + varOperand(op.getOp1())+ ", %eax\n"+
+                    "\tjl  trueLess" + temporalId+"\n"+
+                    "\tmovl $0, " + varOperand(op.getOp2()) + "\n"+
+                    "\tjmp  endtrueLess" + temporalId+"\n"+
+                    "trueLess" + temporalId + ":\n"+
+                    "\tmovl $1, " + varOperand(op.getOp2()) + "\n"+
+                    "endtrueLess" + temporalId + ":\n";
         return result;
     }
     
     private String generateLessEq(OperadorCI op){
         String temporalId = ""+temp;
         temp++;
-        String result = "lessEq" + temporalId + ":\n"+
-                        "\tmovl " + varOperand(op.getOp()) + ", %eax\n";
-        if (op.getOp().getType().equals(Type.FLOAT)){
-            result += "\tmovl %eax, %xmm0\n"+
-                      "\tmovl " + varOperand(op.getOp1()) + ", %eax\n"+
-                      "\tmovl %eax, %xmm1\n"+
-                      "\tucomiss %xmm0, %xmm1\n"+
-                      "jae isLessEq" + temporalId + "\n"; 
-        }else{
-            result += "\tcmpl " + varOperand(op.getOp1()) + ", %eax\n"+
-                      "jle isLessEq" + temporalId + "\n";
-        }
-        result += "\tmovl $0, " + varOperand(op.getOp2()) + "\n"+
-                  "jmp endLessEq" + temporalId + "\n"+ 
-                  "isLessEq" + temporalId + ":\n"+
-                  "\tmovl $1, " + varOperand(op.getOp2()) + "\n"+
-                  "endLessEq" + temporalId + ":\n";
+        String result= "\tmovl " + varOperand(op.getOp()) + ", %eax\n"+
+                    "\tcmpl " + varOperand(op.getOp1())+ ", %eax\n"+
+                    "\tjle  trueLessEq" + temporalId+"\n"+
+                    "\tmovl $0, " + varOperand(op.getOp2()) + "\n"+
+                    "\tjmp  endtrueLessEq" + temporalId+"\n"+
+                    "trueLessEq" + temporalId + ":\n"+
+                    "\tmovl $1, " + varOperand(op.getOp2()) + "\n"+
+                    "endtrueLessEq" + temporalId + ":\n";
         return result;
     }
     
     private String generateGtrEq(OperadorCI op){
         String temporalId = ""+temp;
         temp++;
-        String result = "gtrEq" + temporalId + ":\n"+
-                        "\tmovl " + varOperand(op.getOp()) + ", %eax\n";
-        if (op.getOp().getType().equals(Type.FLOAT)){
-            result += "\tmovl %eax, %xmm0\n"+
-                      "\tmovl " + varOperand(op.getOp1()) + ", %eax\n"+
-                      "\tmovl %eax, %xmm1\n"+
-                      "ucomiss %xmm0, %xmm1\n"+
-                      "jbe isGtrEq" + temporalId + "\n"; 
-        }else{
-            result += "\tcmpl " + varOperand(op.getOp1()) + ", %eax\n"+
-                      "jge isGtrEq" + temporalId + "\n";
-        }
-        result += "\tmovl $0, " + varOperand(op.getOp2()) + "\n"+
-                  "jmp endGtrEq" + temporalId + "\n"+ 
-                  "isGtrEq" + temporalId + ":\n"+
-                  "\tmovl $1, " + varOperand(op.getOp2()) + "\n"+
-                  "endGtrEq" + temporalId + ":";
+        String result= "\tmovl " + varOperand(op.getOp()) + ", %eax\n"+
+                    "\tcmpl " + varOperand(op.getOp1())+ ", %eax\n"+
+                    "\tjge  trueGtrEq" + temporalId+"\n"+
+                    "\tmovl $0, " + varOperand(op.getOp2()) + "\n"+
+                    "\tjmp  endtrueGtrEq" + temporalId+"\n"+
+                    "trueGtrEq" + temporalId + ":\n"+
+                    "\tmovl $1, " + varOperand(op.getOp2()) + "\n"+
+                    "endtrueGtrEq" + temporalId + ":\n";
         return result;
     }
     
     private String generateEq(OperadorCI op){
         String temporalId = ""+temp;
         temp++;
-        String result= "Equal" + temporalId + ":\n"+
+        String result= //"Equal" + temporalId + ":\n"+
                         "\tmovl " + varOperand(op.getOp()) + ", %eax\n"+
                         "\tcmpl " + varOperand(op.getOp1()) + ", %eax\n"+
                         "je equals" + temporalId + "\n"+
@@ -370,15 +340,14 @@ public class Assembly {
     private String generateNotEqual(OperadorCI op){
         String temporalId = ""+temp;
         temp++;
-        String result= "notEqual" + temporalId + ":\n"+
-                        "\tmovl " + varOperand(op.getOp()) + ", %eax\n"+
-                        "\tcmpl " + varOperand(op.getOp1()) + ", %eax\n"+
-                        "jne notEq" + temporalId + "\n"+
-                        "\tmovl $0, " + varOperand(op.getOp2()) + "\n"+
-                        "jmp endNotEqual" + temporalId + "\n"+ 
-                        "notEq" + temporalId + ":\n"+
-                        "\tmovl $1, " + varOperand(op.getOp2()) + "\n"+
-                        "endNotEqual" + temporalId + ":\n";
+        String result= "\tmovl " + varOperand(op.getOp()) + ", %eax\n"+
+                    "\tcmpl " + varOperand(op.getOp1())+ ", %eax\n"+
+                    "\tjne  notEq" + temporalId+"\n"+
+                    "\tmovl $0, " + varOperand(op.getOp2()) + "\n"+
+                    "\tjmp  endnotEq" + temporalId+"\n"+
+                    "notEq" + temporalId + ":\n"+
+                    "\tmovl $1, " + varOperand(op.getOp2()) + "\n"+
+                    "endnotEq" + temporalId + ":\n";
         return result;
     }
     
@@ -405,20 +374,9 @@ public class Assembly {
     }
     
     private String generateCall(OperadorCI op){
-        //String result="\tpushl "+varOperand(op.getOp1())+
         String result="\tcall "+op.getS()+"\n"+
-                      "\tmovl %eax,"+varOperand(op.getOp())+"\n";
-//        if (!(op.getOp1().getType().equals(Type.FLOAT))){
-//                result="\tmovl $0, %eax\n"+
-//                        "\tcall " + op.getOp() + "\n"+
-//                        "\tmovl %eax," + varOperand(op.getOp1())+"\n";
-//        }else{
-//                result="\tcall " + op.getOp() + "\n"+
-//                        "\tmovl %xmm0," + varOperand(op.getOp1())+"\n";
-//        }
-//        if (pusheado%2 != 0){
-            result += "\taddl $"+pusheado*4+", %esp\n";  
-//        }
+                      "\tmovl %eax,"+varOperand(op.getOp())+"\n"+
+                      "\taddl $"+pusheado*4+", %esp\n";  
         pusheado=0;
         return result;
     }
@@ -449,7 +407,7 @@ public class Assembly {
         }
     
     private String generateJumpFalse(OperadorCI op){
-            String result="\tmovl " + varOperand(op.getOp()) + ", %eax\n"+
+            String result=  "\tmovl " + varOperand(op.getOp()) + ", %eax\n"+
                             "\tcmpl $0, %eax\n"+
                             "\tje " + op.getS()+"\n";
             return result;
@@ -485,6 +443,5 @@ public class Assembly {
         result += "\tleave\n\tret\n";
         return result;
     }
-    
     
 }
