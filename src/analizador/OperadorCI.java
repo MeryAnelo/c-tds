@@ -15,6 +15,15 @@ public class OperadorCI {
     private Expression op1;
     private Expression op2;
     private String s;
+    private boolean meth;
+
+    public boolean isMeth() {
+        return meth;
+    }
+
+    public void setMeth(boolean meth) {
+        this.meth = meth;
+    }
 
     public OperadorCI(listaCI nom, Expression op, Expression op1, Expression op2) {
         this.nom = nom;
@@ -23,8 +32,14 @@ public class OperadorCI {
         this.op2 = op2;
     }
     
-    public OperadorCI(listaCI nom, String s) {
+//    public OperadorCI(listaCI nom, String s) {
+//        this.nom = nom;
+//        this.s = s;
+//    }
+    
+    public OperadorCI(listaCI nom, String s,boolean method) {
         this.nom = nom;
+        this.meth=method;
         this.s = s;
     }
 

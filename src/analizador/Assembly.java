@@ -29,15 +29,16 @@ public class Assembly {
         f = new File(rute,nombre);
         try{
             FileWriter w = new FileWriter(f);
-            w.write(".type main, @function\n");
-            w.write(".globl  main\n");
+//            w.write(".file\t"+nombre+".compi\n");
+//            w.write(".type main, @function\n");
+//            w.write(".globl  main\n");
             //PrintWriter wr = new PrintWriter(w);
             //aca el swich
             listaCI op;
             for (int i = 0; i < lista.size(); i++) {
                 op = lista.get(i).getNom();
                 OperadorCI gen=lista.get(i);
-//                System.out.println("--"+lista.get(i).getNom()+"="+op);
+                System.out.println("--"+lista.get(i).getNom()+"="+op);
                 switch (op){
                     case ADDINT:
                        w.write(generateAddInt(gen));
@@ -129,21 +130,22 @@ public class Assembly {
                         w.write(generatePushFloat(gen));
                         break;
                     case LABEL:
-                        if (gen.getS().contains("Main:") || gen.getS().contains("main:") || gen.getS().contains("MAIN:")) {
-                            w.write(gen.getS()+"\n"+
-                                "\tpushl %ebp\n"+
-                                "\tmovl %esp, %ebp\n"+
-                                "\tsubl $16, %esp\n");
+//                        if (gen.getS().contains("Main:") || gen.getS().contains("main:") || gen.getS().contains("MAIN:")) {
+//                            w.write(gen.getS()+"\n"+
+//                                "\tpushl %ebp\n"+
+//                                "\tmovl %esp, %ebp\n"+
+//                                "\tsubl $16, %esp\n");
+//                        }
+                        if(gen.isMeth()){
+                            w.write(gen.getS());
                         }
-                        if (!gen.getS().contains("Extern: ") && !gen.getS().contains("end_Method:") && 
-                                (!gen.getS().contains("Main:") && !gen.getS().contains("main:") && !gen.getS().contains("MAIN:"))) {
-                            System.out.println("SHUT");
+                        if (!gen.isMeth() && (!gen.getS().contains("Main:") && !gen.getS().contains("main:") && !gen.getS().contains("MAIN:"))) {
                             w.write(gen.getS()+":"+"\n");
                         }
                         
                         break;
                 }
-//                System.out.println(i+" < "+lista.size());
+                System.out.println(i+" < "+lista.size());
             }
             w.close();
             
@@ -432,9 +434,9 @@ public class Assembly {
         String result;
         if (op.getOp()!=null){
             result = "\tmovl " + varOperand(op.getOp()) + ", " + "%eax\n";
-            if (op.getOp().getType().toString().equals("float")){
-                result += "\tmovl %eax, %xmm0\n";
-            }
+//            if (op.getOp().getType().toString().equals("float")){
+//                result += "\tmovl %eax, %xmm0\n";
+//            }
         }else{
             result = "\tnop\n"; //no operaciòn, "return;"
         }

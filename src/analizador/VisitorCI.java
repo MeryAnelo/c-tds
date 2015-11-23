@@ -202,8 +202,8 @@ public class VisitorCI implements ASTVisitor<Expression>{
 
     @Override
     public Expression visit(BreakStmt breakSt) {
-        li.add(new OperadorCI(listaCI.BREAK,null));
-        li.add(new OperadorCI(listaCI.JUMP, pila.getFirst().getSnd()));
+        li.add(new OperadorCI(listaCI.BREAK,null,false));
+        li.add(new OperadorCI(listaCI.JUMP, pila.getFirst().getSnd(),false));
         return breakSt.getExpression();
     }
 
@@ -215,8 +215,8 @@ public class VisitorCI implements ASTVisitor<Expression>{
 
     @Override
     public Expression visit(ContinueStmt ConSt) {
-        li.add(new OperadorCI(listaCI.CONTINUE, null));
-        li.add(new OperadorCI(listaCI.JUMP, pila.getFirst().getFst()));
+        li.add(new OperadorCI(listaCI.CONTINUE, null,false));
+        li.add(new OperadorCI(listaCI.JUMP, pila.getFirst().getFst(),false));
         return ConSt.getExpression();
     }
 
@@ -225,13 +225,24 @@ public class VisitorCI implements ASTVisitor<Expression>{
         int i=0;
         while (i < dec.getMethod().size()){
             if (dec.getMethod().get(i).getBlock().getField()==null && dec.getMethod().get(i).getBlock().getStatements()==null){
-                li.add(new OperadorCI(listaCI.LABEL,"Extern: "+dec.getMethod().get(i).getId()+":"));
+                li.add(new OperadorCI(listaCI.LABEL,"Extern"+dec.getMethod().get(i).getId(),false));
                 dec.getMethod().get(i).setExtern(true);
                 methodsExtern.add(dec.getMethod().get(i).getId());
             }else{
-                li.add(new OperadorCI(listaCI.LABEL,dec.getMethod().get(i).getId()+":"));
+                String generacion="\t.globl\t"+dec.getMethod().get(i).getId()+"\n" +
+                                  "\t.type\t"+dec.getMethod().get(i).getId()+", @function\n"+
+                                    dec.getMethod().get(i).getId()+":\n";
+                if(dec.getMethod().get(i).getId().toUpperCase().contains("MAIN")){
+                    generacion+="\tpushl %ebp\n"+
+                                "\tmovl %esp, %ebp\n"+
+                                "\tsubl $16, %esp\n";
+                }
+                //li.add(new OperadorCI(listaCI.LABEL,dec.getMethod().get(i).getId()));
+                li.add(new OperadorCI(listaCI.LABEL,generacion,true));
                 dec.getMethod().get(i).accept(this);
-                li.add(new OperadorCI(listaCI.LABEL,"end_Method: "+dec.getMethod().get(i).getId()));
+                generacion="end_Method"+dec.getMethod().get(i).getId()+":\n"+
+                        "\n\t.size "+dec.getMethod().get(i).getId()+", .-"+dec.getMethod().get(i).getId()+"\n";
+                li.add(new OperadorCI(listaCI.LABEL,generacion,true));
             }
             i++;
         }
@@ -271,7 +282,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
         offset -= Byte;
         var.setOffset(offset);
         locations.add(var);
-        li.add(new OperadorCI(listaCI.LABEL,"for"+auxW));
+        li.add(new OperadorCI(listaCI.LABEL,"for"+auxW,false));
         count++;
         int auxE = count;       
         Expression e;
@@ -292,8 +303,8 @@ public class VisitorCI implements ASTVisitor<Expression>{
         }
         //aca busco la variable que se va a ir incrementando
         new AssignStmt(var, AssignOpType.AUTOIN, new IntLiteral(1)).accept(this);
-        li.add(new OperadorCI(listaCI.JUMP, "for"+auxW));
-        li.add(new OperadorCI(listaCI.LABEL,"end_for"+auxE));
+        li.add(new OperadorCI(listaCI.JUMP, "for"+auxW,false));
+        li.add(new OperadorCI(listaCI.LABEL,"end_for"+auxE,false));
         pila.removeFirst();
         return null;
     }
@@ -305,15 +316,15 @@ public class VisitorCI implements ASTVisitor<Expression>{
         Integer aux = count;
         count++;
         ifSt.getIfBlock().accept(this);
-        li.add(new OperadorCI(listaCI.JUMP, "end_if"+count));
+        li.add(new OperadorCI(listaCI.JUMP, "end_if"+count,false));
         Integer aux2 = count;
         count++;
-        li.add(new OperadorCI(listaCI.LABEL, "else_if"+aux.toString()+":"));
+        li.add(new OperadorCI(listaCI.LABEL, "else_if"+aux.toString()+":",false));
         if (ifSt.getElseBlock()!= null) {
             ifSt.getElseBlock().accept(this);
         }
         
-        li.add(new OperadorCI(listaCI.LABEL, "end_if"+aux2+":"));
+        li.add(new OperadorCI(listaCI.LABEL, "end_if"+aux2+":",false));
         return null;
     }
 
@@ -443,7 +454,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
     @Override
     public Expression visit(WhileStmt whileSt) {
         int auxW = count;
-        li.add(new OperadorCI(listaCI.LABEL,"while"+auxW));
+        li.add(new OperadorCI(listaCI.LABEL,"while"+auxW,false));
         count++;
         VarLocation v = (VarLocation)whileSt.getCondition().accept(this);
         int auxE = count;
@@ -451,8 +462,8 @@ public class VisitorCI implements ASTVisitor<Expression>{
         count++;
         pila.addFirst(new Pair("while"+auxW,"end_while"+auxE));
         whileSt.getStatement().accept(this);
-        li.add(new OperadorCI(listaCI.JUMP, "while"+auxW));
-        li.add(new OperadorCI(listaCI.LABEL,"end_while"+auxE));
+        li.add(new OperadorCI(listaCI.JUMP, "while"+auxW,false));
+        li.add(new OperadorCI(listaCI.LABEL,"end_while"+auxE,false));
         pila.removeFirst();
         return null;
     }
