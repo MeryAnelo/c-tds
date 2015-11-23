@@ -37,10 +37,10 @@ public class Assembly {
             for (int i = 0; i < lista.size(); i++) {
                 op = lista.get(i).getNom();
                 OperadorCI gen=lista.get(i);
-                System.out.println("--"+lista.get(i).getNom()+"="+op);
+//                System.out.println("--"+lista.get(i).getNom()+"="+op);
                 switch (op){
                     case ADDINT:
-                       w.write("//suma\n"+generateAddInt(gen)+"\n");
+                       w.write(generateAddInt(gen));
                        break;
                     case ADDFLOAT:
                         w.write(generateAddFloat(gen));
@@ -73,7 +73,7 @@ public class Assembly {
                         w.write(generateGtr(gen));
                         break;
                     case LESS:
-                        w.write("//less\n"+generateLess(gen)+"\n");
+                        w.write(generateLess(gen));
                         break;
                     case LESS_EQ:
                         w.write(generateLessEq(gen));
@@ -115,7 +115,7 @@ public class Assembly {
                         w.write(generateJump(gen));
                         break;
                     case JUMP_FALSE:
-                        w.write("//false\n"+generateJumpFalse(gen)+"//jfalse\n");
+                        w.write(generateJumpFalse(gen));
                     case BREAK:
                         break;
                         //aca no hacer nada
@@ -123,7 +123,7 @@ public class Assembly {
                         break;
                         //aca no hacer nada
                     case PUSHI:
-                        w.write("\n//push\n"+generatePushInt(gen)+"//pushend\n");
+                        w.write(generatePushInt(gen));
                         break;
                     case PUSHF:
                         w.write(generatePushFloat(gen));
@@ -143,7 +143,7 @@ public class Assembly {
                         
                         break;
                 }
-                System.out.println(i+" < "+lista.size());
+//                System.out.println(i+" < "+lista.size());
             }
             w.close();
             
