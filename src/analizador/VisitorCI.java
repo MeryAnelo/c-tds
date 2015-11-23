@@ -40,57 +40,54 @@ public class VisitorCI implements ASTVisitor<Expression>{
         for (int i = 0; i < li.size(); i++) {
             System.out.println(li.get(i).toString());
         }
-//        for (int i = 0; i < locations.size(); i++) {
-//            System.out.println(locations.get(i));
-//        }
     }
     @Override
     public Expression visit(AssignStmt AssSt) {
-//        int indice=-1;
         Location loc= AssSt.getId();;
-//        if (locations.contains(AssSt.getId().getId())) {
-//            indice = locations.indexOf(AssSt.getId());
-//        }else{
-//            loc = AssSt.getId();
-//        }
-//        
+        Location aux;
         AssignOpType op = AssSt.getOperator();
         Expression expr = AssSt.getExpression().accept(this);
         switch (op) {
             case AUTOIN:
-                offset -= Byte;
-                AssSt.getId().setOffset(offset);
-                loc.setOffset(offset);
-                loc=AssSt.getId();
-                li.add(new OperadorCI(listaCI.ADDINT, AssSt.getId(), expr,loc));
-//                if (AssSt.getId().getType()==Type.INT) {
-//                    li.add(new OperadorCI(listaCI.ADDINT, AssSt.getId(), expr,loc));
-//                }else{
-//                    li.add(new OperadorCI(listaCI.ADDFLOAT, AssSt.getId(), expr, loc));
-//                }
+                aux = buscarLoc(AssSt.getId().getId());
+                if (aux==null) {
+                    offset -= Byte;
+                    AssSt.getId().setOffset(offset);
+                    loc.setOffset(offset);
+                    loc=AssSt.getId();
+                    li.add(new OperadorCI(listaCI.ADDINT, AssSt.getId(), expr, loc));
+                }else{
+                    loc=aux;
+                    li.add(new OperadorCI(listaCI.ADDINT, aux, expr, loc));
+                }
                 break;
             case AUTODEC:
-                offset -= Byte;
-                AssSt.getId().setOffset(offset);
-                loc.setOffset(offset);
-                loc=AssSt.getId();
-                li.add(new OperadorCI(listaCI.MINUSI, AssSt.getId(), expr, loc));
-//                if (AssSt.getId().getType()==Type.INT) {
-//                    li.add(new OperadorCI(listaCI.MINUSI, AssSt.getId(), expr, loc));
-//                }else{
-//                    li.add(new OperadorCI(listaCI.MINUSF, AssSt.getId(), expr, loc));
-//                }
+                aux = buscarLoc(AssSt.getId().getId());
+                if (aux==null) {
+                    offset -= Byte;
+                    AssSt.getId().setOffset(offset);
+                    loc.setOffset(offset);
+                    loc=AssSt.getId();
+                    li.add(new OperadorCI(listaCI.MINUSI, AssSt.getId(), expr, loc));
+                }else{
+                    loc=aux;
+                    li.add(new OperadorCI(listaCI.MINUSI, aux, expr, loc));
+                }
                 break;
             case ASSMNT:
-                offset -= Byte;
-                AssSt.getId().setOffset(offset);
-                loc.setOffset(offset);
                 Expression e=expr.accept(this);
-                li.add(new OperadorCI(listaCI.ASSMNT, AssSt.getId(), e, null));
+                aux = buscarLoc(AssSt.getId().getId());
+                if (aux==null) {
+                    offset -= Byte;
+                    AssSt.getId().setOffset(offset);
+                    li.add(new OperadorCI(listaCI.ASSMNT, AssSt.getId(), e, null));
+                }else{
+                    li.add(new OperadorCI(listaCI.ASSMNT, aux, e, null));
+                }
                 break;
         }
         locations.add(loc);
-//        System.out.println("1 Var: "+AssSt.getId().getId()+", OffSet: "+AssSt.getId().getOffset());
+        locations.add(AssSt.getId());
         return null;
     }
 
