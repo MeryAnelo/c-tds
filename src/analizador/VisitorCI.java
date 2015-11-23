@@ -58,7 +58,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
                     li.add(new OperadorCI(listaCI.ADDINT, AssSt.getId(), expr, loc));
                 }else{
                     loc=aux;
-                    li.add(new OperadorCI(listaCI.ADDINT, aux, expr, loc));
+                    li.add(new OperadorCI(listaCI.ADDINT, aux, expr, aux));
                 }
                 break;
             case AUTODEC:
@@ -71,7 +71,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
                     li.add(new OperadorCI(listaCI.MINUSI, AssSt.getId(), expr, loc));
                 }else{
                     loc=aux;
-                    li.add(new OperadorCI(listaCI.MINUSI, aux, expr, loc));
+                    li.add(new OperadorCI(listaCI.MINUSI, aux, expr, aux));
                 }
                 break;
             case ASSMNT:
@@ -261,6 +261,10 @@ public class VisitorCI implements ASTVisitor<Expression>{
     @Override
     public Expression visit(ForStmt forSt) {
         int auxW = count;
+        VarLocation var = new VarLocation(forSt.getInicio(),null);
+        offset -= Byte;
+        var.setOffset(offset);
+        locations.add(var);
         li.add(new OperadorCI(listaCI.LABEL,"for"+auxW));
         count++;
         int auxE = count;
@@ -278,17 +282,9 @@ public class VisitorCI implements ASTVisitor<Expression>{
         
         pila.addFirst(new Pair("for"+auxW,"end_for: "+auxE));
         //aca busco la variable que se va a ir incrementando
-        Location loc = buscarLoc(forSt.getInicio());
-        if (loc!=null) {
-            int id = count;
-            count++;
-            VarLocation var = new VarLocation("temp" + id,null);
-            offset -= Byte;
-            var.setOffset(offset);
-            var.setType(loc.getType());
-            li.add(new OperadorCI(listaCI.ADDINT, loc, null, var));
-            System.out.println("Variable INDICE: "+loc.getId());
-        }
+        new AssignStmt(var, AssignOpType.AUTOIN, new IntLiteral(1)).accept(this);
+        //li.add(new OperadorCI(listaCI.ADDINT, var, null, var));
+        System.out.println("Variable INDICE: "+var.getId());
         
         if(forSt.getStatement()!=null){
             forSt.getStatement().accept(this);
