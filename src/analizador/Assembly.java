@@ -58,7 +58,7 @@ public class Assembly {
                         break;
                         //aca escribir en el archivo
                     case MODI:
-                        w.write(generateModInt(gen));
+                        w.write("\n\n"+generateModInt(gen)+"\n\n");
                         break;
                     case MODF:
                         break;

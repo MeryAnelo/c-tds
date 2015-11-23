@@ -136,7 +136,12 @@ public class VisitorCI implements ASTVisitor<Expression>{
 //                }
                 break;
             case DIV:
-                li.add(new OperadorCI(listaCI.MODI, left, right, var));
+                if(left.getClass().toString().contains("IntLiteral")){
+                    li.add(new OperadorCI(listaCI.MODI, left, right, var));
+                }else{
+                    Location location = buscarLoc(left.toString());
+                    li.add(new OperadorCI(listaCI.MODI, location, right, var));
+                }
 //                if (left.getType()==Type.INT) {
 //                    li.add(new OperadorCI(listaCI.MODI, left, right, var));
 //                }else{
