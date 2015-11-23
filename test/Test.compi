@@ -1,3 +1,4 @@
+/*
 class Main {
     void print_int(int i)extern;
 
@@ -14,8 +15,8 @@ class Main {
         return;
     }
 	
-}
-/*
+}*/
+
 class Main{
 
     void print_int(int i)extern;
@@ -39,11 +40,11 @@ class Main{
     
     void main(){
         int i,f;
-        f=6;
-        print_int(f);
-        i=fib(f);
+        //f=6;
+        //print_int(f);
+        i=fib(6);
         print_int(i);
         return;
 
     }
-}*/
+}

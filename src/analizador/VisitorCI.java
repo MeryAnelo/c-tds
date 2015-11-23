@@ -251,7 +251,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
 
     @Override
     public Expression visit(Expression expr) {
-        System.out.println("LLEGUE ACA");
+        //System.out.println("LLEGUE ACA");
         return null;
     }
 
@@ -360,24 +360,21 @@ public class VisitorCI implements ASTVisitor<Expression>{
     public Expression visit(MethodCall mc) {
         LinkedList<Expression> l = mc.getlParam();
         Expression expr;
-//        for (int i = 0; i < l.size(); i++) {
-//            expr = l.get(i);
-//            Location location = buscarLoc(expr.toString());
-//            if (expr.getType()==Type.INT || expr.getType()==Type.BOOLEAN) {
-//                expr.setType(Type.INT);
-//                System.out.println("Metodo: "+mc.getId()+" Push Nª: "+expr.toString());
-//                Location loc = locations.get(0);
-//                li.add(new OperadorCI(listaCI.PUSHI,expr,location,null));
-//            }else if(expr.getType()==Type.FLOAT){
-//                li.add(new OperadorCI(listaCI.PUSHF,expr,location,null));
-//            }
-//        }
         for (int i = 0; i < l.size(); i++) {
             expr = l.get(i);
             Location location = buscarLoc(expr.toString());
-            System.out.println("Metodo: "+mc.getId()+" Push Nª: "+expr.toString());
-            Location loc = locations.get(0);
-            li.add(new OperadorCI(listaCI.PUSHI,expr,location,null));
+            VarLocation var;
+            if (expr.getType()==Type.INT) {
+                var = new VarLocation(l.get(i).toString(),expr);
+                offset -= Byte;
+                var.setOffset(offset);
+                li.add(new OperadorCI(listaCI.PUSHI,expr,null,null));
+                System.out.println("Soy Literal "+"Var: "+var.getId()+" Offset: "+var.getOffset());
+            }else{
+                System.out.println("Metodo: "+mc.getId()+" Push Nª: "+expr.toString());
+                li.add(new OperadorCI(listaCI.PUSHI,expr,location,null));
+            }
+            
         }
         VarLocation res = new VarLocation("temp"+count,null);
         count++;

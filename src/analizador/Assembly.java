@@ -381,8 +381,15 @@ public class Assembly {
     }
     
     private String generatePushInt(OperadorCI op){
-        String result="\tmovl "+varOperand(op.getOp1())+", %eax\n"+
-                      "\tpushl %eax\n";
+        String result;
+        if (op.getOp().getType()==Type.INT && op.getOp1()==null) {
+            //System.out.println("LITERALLLLLLLLLLLLLL");
+            result="\tmovl "+varOperand(op.getOp())+", %eax\n"+
+            "\tpushl %eax\n";
+        }else{
+            result="\tmovl "+varOperand(op.getOp1())+", %eax\n"+
+            "\tpushl %eax\n";
+        }
         pusheado++;
         return result;
     }
