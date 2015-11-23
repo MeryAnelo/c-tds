@@ -261,9 +261,14 @@ public class VisitorCI implements ASTVisitor<Expression>{
     @Override
     public Expression visit(ForStmt forSt) {
         int auxW = count;
-        VarLocation var = new VarLocation(forSt.getInicio(),forSt.getCondition());
-        offset -= Byte;
-        var.setOffset(offset);
+        Location var = buscarLoc(forSt.getInicio());
+        if (var == null) {
+            var = new VarLocation(forSt.getInicio(),forSt.getCondition());
+            offset -= Byte;
+            var.setOffset(offset);
+        }
+        
+        System.out.println("VAR: "+var.getId()+" OffSet: "+var.getOffset());
         locations.add(var);
         li.add(new OperadorCI(listaCI.LABEL,"for"+auxW));
         count++;
@@ -293,7 +298,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
             forSt.getStatement().accept(this);
         }
         li.add(new OperadorCI(listaCI.JUMP, "for"+auxW));
-        li.add(new OperadorCI(listaCI.LABEL,"end_for"+auxE+":"));
+        li.add(new OperadorCI(listaCI.LABEL,"end_for"+auxE));
         pila.removeFirst();
         return null;
     }
