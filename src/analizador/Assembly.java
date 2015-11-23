@@ -37,7 +37,7 @@ public class Assembly {
             for (int i = 0; i < lista.size(); i++) {
                 op = lista.get(i).getNom();
                 OperadorCI gen=lista.get(i);
-//                System.out.println("--"+lista.get(i).getNom()+"="+op);
+                System.out.println("--"+lista.get(i).getNom()+"="+op);
                 switch (op){
                     case ADDINT:
                        w.write("//suma\n"+generateAddInt(gen)+"\n");
@@ -143,7 +143,7 @@ public class Assembly {
                         
                         break;
                 }
-//                System.out.println(i+" < "+lista.size());
+                System.out.println(i+" < "+lista.size());
             }
             w.close();
             
@@ -236,20 +236,16 @@ public class Assembly {
     }
     
     private String generateModInt(OperadorCI op){
-        String result = "\tmovl " + varOperand(op.getOp()) + ", %eax\n"+
+        String result = "\tmovl $0, %edx\n"+
+                        "\tmovl " + varOperand(op.getOp()) + ", %eax\n"+
                         "\tmovl " + varOperand(op.getOp1()) + ", %ecx\n"+
-                        "\tmovl %edx, %r11d\n"+
-                        "\tmovl $0, %edx\n"+ 
-                        "\tidivl %ecx\n"+//resto en edx, cociente en eax
-                        "\tmovl %edx, %ecx\n"+
-                        "\tmovl %r11d, %edx\n"+ //restauracion del valor de edx
-                        "\tmovl %ecx, " + varOperand(op.getOp2())+"\n";
+                        "\tcltd\n"+
+                        "\tidivl %ecx\n"+
+                        "\tmovl " + " %edx, " + varOperand(op.getOp2())+"\n";
         return result;
     }
     
     private String generateAssmnt(OperadorCI op){
-//        "\tmovl " + calculateOffset(loc) + ", %eax"
-//            " \tmovl %eax, " + calculateOffset(res)
         String result=  "\tmovl "+ varOperand(op.getOp1()) + ", %eax \n"+
                         "\tmovl " + "%eax" +", "+varOperand(op.getOp())+"\n";
         return result;

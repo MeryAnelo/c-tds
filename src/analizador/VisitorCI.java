@@ -261,7 +261,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
     @Override
     public Expression visit(ForStmt forSt) {
         int auxW = count;
-        VarLocation var = new VarLocation(forSt.getInicio(),null);
+        VarLocation var = new VarLocation(forSt.getInicio(),forSt.getCondition());
         offset -= Byte;
         var.setOffset(offset);
         locations.add(var);
@@ -269,21 +269,24 @@ public class VisitorCI implements ASTVisitor<Expression>{
         count++;
         int auxE = count;
         Expression e;
-        if(!(forSt.getForBlock().getClass().toString().contains("Expression"))){
-            e=(Expression)new BinOpExpr(forSt.getCondition().accept(this),BinOpType.LESS,forSt.getForBlock());
+        if(forSt.getForBlock().accept(this).getClass().toString().contains("IntLiteral")){
+            System.out.println("esto: "+var.toString()+" less "+forSt.getForBlock());
+            e=(Expression)new BinOpExpr(var,BinOpType.LESS,forSt.getForBlock());
+            e=e.accept(this);
         }else{
             e=forSt.getForBlock().accept(this);
         }
         System.out.println("Inicio for: "+forSt.getInicio());
         System.out.println("Condicion for: "+forSt.getCondition().toString());
         System.out.println("Expression for: "+e.toString());
-        li.add(new OperadorCI(listaCI.JUMP_FALSE, "end_for: "+auxE,e));
+        System.out.println("Variable: "+var.toString());
+        li.add(new OperadorCI(listaCI.JUMP_FALSE, "end_for"+auxE,e));
         count++;
         
         pila.addFirst(new Pair("for"+auxW,"end_for: "+auxE));
         //aca busco la variable que se va a ir incrementando
         new AssignStmt(var, AssignOpType.AUTOIN, new IntLiteral(1)).accept(this);
-        //li.add(new OperadorCI(listaCI.ADDINT, var, null, var));
+//        li.add(new OperadorCI(listaCI.ADDINT, var, new IntLiteral(1), var));
         System.out.println("Variable INDICE: "+var.getId());
         
         if(forSt.getStatement()!=null){
