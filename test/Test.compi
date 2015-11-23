@@ -2,11 +2,12 @@ class Main {
     void print_int(int i)extern;
 
     void main(){ 
-        int i;
+        int i,j;
         i=0;
-        while (i<10){
-            print_int(i);
-            i = i +1;
+        j=0;
+        for i =0, 15{
+            print_int(j);
+            j = j+1;
         }
         return;
     }

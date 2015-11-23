@@ -235,6 +235,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
 
     @Override
     public Expression visit(Expression expr) {
+        System.out.println("LLEGUE ACA");
         return null;
     }
 
@@ -245,6 +246,10 @@ public class VisitorCI implements ASTVisitor<Expression>{
 
     @Override
     public Expression visit(FieldDeclaration flDec) {
+//        for (int i = 0; i < flDec.getLid().size(); i++) {
+//            Location a = (Location)flDec.getLid().get(i);
+//            locations.add(a);
+//        }
         return null;
     }
 
@@ -265,10 +270,26 @@ public class VisitorCI implements ASTVisitor<Expression>{
         }else{
             e=forSt.getForBlock().accept(this);
         }
+        System.out.println("Inicio for: "+forSt.getInicio());
+        System.out.println("Condicion for: "+forSt.getCondition().toString());
+        System.out.println("Expression for: "+e.toString());
         li.add(new OperadorCI(listaCI.JUMP_FALSE, "end_for: "+auxE,e));
         count++;
         
         pila.addFirst(new Pair("for"+auxW,"end_for: "+auxE));
+        //aca busco la variable que se va a ir incrementando
+        Location loc = buscarLoc(forSt.getInicio());
+        if (loc!=null) {
+            int id = count;
+            count++;
+            VarLocation var = new VarLocation("temp" + id,null);
+            offset -= Byte;
+            var.setOffset(offset);
+            var.setType(loc.getType());
+            li.add(new OperadorCI(listaCI.ADDINT, loc, null, var));
+            System.out.println("Variable INDICE: "+loc.getId());
+        }
+        
         if(forSt.getStatement()!=null){
             forSt.getStatement().accept(this);
         }
