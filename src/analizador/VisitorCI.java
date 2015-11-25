@@ -363,8 +363,10 @@ public class VisitorCI implements ASTVisitor<Expression>{
         for (int i = 0; i < l.size(); i++) {
             expr = l.get(i);
             Location location = buscarLoc(expr.toString());
+            System.out.println("variable encontrada: "+location);
             VarLocation var;
-            if (expr.getType()==Type.INT) {
+            System.out.println("el tipo de clase: "+expr.getClass().toString());
+            if (expr.getClass().toString().contains("IntLiteral")) {
                 var = new VarLocation(l.get(i).toString(),expr);
                 offset -= Byte;
                 var.setOffset(offset);
@@ -372,7 +374,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
                 System.out.println("Soy Literal "+"Var: "+var.getId()+" Offset: "+var.getOffset());
             }else{
                 System.out.println("Metodo: "+mc.getId()+" Push Nª: "+expr.toString());
-                li.add(new OperadorCI(listaCI.PUSHI,expr,location,null));
+                li.add(new OperadorCI(listaCI.PUSHI,location,null,null));
             }
             
         }
