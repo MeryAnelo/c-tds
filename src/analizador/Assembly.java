@@ -253,22 +253,19 @@ public class Assembly {
         return result;
     }
     
-    private String generateMinusInt(OperadorCI op){
+    private String generateMinusInt(OperadorCI op){   
         String result = "\tmovl " + varOperand(op.getOp()) + ", %eax\n"+
-                        "\tmovl " + varOperand(op.getOp1()) + ", %edx\n"+
-                        //"\tmovl " + "%edx" + ", %ecx\n"+
-                        "\tsubl " + "%edx" + ", %eax\n"+
-                        "\tmovl " + "%ecx" + ", %eax\n"+
-                        "\tmovl %eax, " + varOperand(op.getOp2())+"\n";
+                    "\tmovl " + varOperand(op.getOp1()) + ", %edx\n"+
+                    "\tsubl %edx, %eax\n"+
+                    "\tmovl %eax, " + varOperand(op.getOp2())+"\n";
         return result;
     }
     
     private String generateGtr (OperadorCI op){
         String temporalId = ""+temp;
         temp++;
-        String result = //"gtr" + temporalId + ":\n"+
-                 "\tmovl " + varOperand(op.getOp1()) + ", %eax\n"+
-                 "\tcmpl " + varOperand(op.getOp()) + ", %eax\n"+
+        String result ="\tmovl " + varOperand(op.getOp()) + ", %eax\n"+
+                 "\tcmpl " + varOperand(op.getOp1()) + ", %eax\n"+
                  "jg isGtr" + temporalId + "\n"+
                  "\tmovl $0, " + varOperand(op.getOp2()) + "\n"+
                  "jmp endGtr" + temporalId + "\n"+

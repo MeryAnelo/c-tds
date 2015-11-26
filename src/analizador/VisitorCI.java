@@ -20,7 +20,7 @@ public class VisitorCI implements ASTVisitor<Expression>{
     int count = 0;
     int Byte = 4;
     int offset = 0;
-    
+            
     public LinkedList<OperadorCI> getListaCI(){
         return li;
     }
@@ -229,14 +229,29 @@ public class VisitorCI implements ASTVisitor<Expression>{
                 dec.getMethod().get(i).setExtern(true);
                 methodsExtern.add(dec.getMethod().get(i).getId());
             }else{
+                int buscar=0;
+                if(dec.getMethod().get(i).getParameter()!=null){
+                    buscar=dec.getMethod().get(i).getParameter().size();
+                }
+                /*
+                ** Problemas al llamar funciones con el valor del offset!!!
+                */
                 String generacion="\t.globl\t"+dec.getMethod().get(i).getId()+"\n" +
                                   "\t.type\t"+dec.getMethod().get(i).getId()+", @function\n"+
                                     dec.getMethod().get(i).getId()+":\n";
-                if(dec.getMethod().get(i).getId().toUpperCase().contains("MAIN")){
-                    generacion+="\tpushl %ebp\n"+
-                                "\tmovl %esp, %ebp\n"+
-                                "\tsubl $16, %esp\n";
-                }
+                generacion+="\t"+"pushl %ebp"+"\n"+
+                                "\t"+"movl %esp, %ebp"+"\n"+
+                                "\tsubl $-"+(offset-(buscar*4+4))+", %esp"+"\n";
+//                if(dec.getMethod().get(i).getId().toUpperCase().contains("MAIN")){
+//                    generacion+="\tpushl %ebp\n"+
+//                                "\tmovl %esp, %ebp\n"+
+//                                "\tsubl $16, %esp\n";
+//                }else{
+//                    int valueOffset=-offset;
+//                    generacion+="\t"+"pushl %ebp"+"\n"+
+//                                "\t"+"movl %esp, %ebp"+"\n"+
+//                                "\tsubl $"+valueOffset+", %esp"+"\n";
+//                }
                 //li.add(new OperadorCI(listaCI.LABEL,dec.getMethod().get(i).getId()));
                 li.add(new OperadorCI(listaCI.LABEL,generacion,true));
                 dec.getMethod().get(i).accept(this);
@@ -371,7 +386,6 @@ public class VisitorCI implements ASTVisitor<Expression>{
                 offset -= Byte;
                 var.setOffset(offset);
                 li.add(new OperadorCI(listaCI.PUSHI,expr,null,null));
-                System.out.println("Soy Literal "+"Var: "+var.getId()+" Offset: "+var.getOffset());
             }else{
                 System.out.println("Metodo: "+mc.getId()+" Push Nª: "+expr.toString());
                 li.add(new OperadorCI(listaCI.PUSHI,location,null,null));
