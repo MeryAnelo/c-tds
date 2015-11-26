@@ -27,23 +27,30 @@ class Main {
         int first,second,tmp;
         first = 0;
         second = 1;
-        print_int(n);
         while n>0 {
             tmp = first+second;
             first = second;
             second = tmp;
             n -= 1;
-            print_int(n);
         }
         return first;
     }
     
     void main(){
         int i,f;
-        //f=6;
-        //print_int(f);
+        print_int(99);
+        f=6;
         i=fib(6);
         print_int(i);
+
+        //print_int(fib(7));
+        //no esta funcionando el push para metodos
+        //print_int(fib(f));
+
+        //f+=1;
+        //i=fib(f);
+        //print_int(i);
+
         return;
 
     }
@@ -56,6 +63,7 @@ class Main{
     //calculo fib iterativo sin funcion
     void main(){
         int n,first,second,tmp;
+        p=100;
         n=6;
         first = 0;
         second = 1;
@@ -64,10 +72,15 @@ class Main{
             first = second;
             second = tmp;
             n -= 1;
-   //         print_int(n);
         }
-   //     first=3;
         print_int(first);
         return;
     }
 }
+
+/*
+**PROBLEMAS PARA FUNCIONAR CON FUNCIONES POR EL OFFSET
+**PROBLEMAS PARA UTILIZAR PARAMETROS EN FUNCIONES "NO ENCUENTRA, NO EXISTE" 
+**en base al buscarLoc creado en VisitorCI no ve el valor inicial en java
+**al estar debajo, en el main. El Push en tres direcciones no encuentra la variable
+*/
