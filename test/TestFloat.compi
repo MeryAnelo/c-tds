@@ -1,0 +1,15 @@
+class Main{
+
+    void print_float(int s)extern;
+
+    void main(){
+        float a,b,mul,duv;
+        a=6.4;
+        b=2.2;
+        mul=a*b;
+        div=a/b;
+        print_float(mul);
+        print_float(div);
+        return;
+    }
+}
