@@ -23,17 +23,12 @@ public class Assembly {
     private int pusheado=0;
     private int temp;
     
-    public void generateAss(String rute,String nombre, LinkedList<OperadorCI> l) throws IOException{
+    public void generateAss(String nombre, LinkedList<OperadorCI> l) throws IOException{
         temp=0;
         lista = l;
-        f = new File(rute,nombre);
+        f = new File("../"+nombre);
         try{
             FileWriter w = new FileWriter(f);
-//            w.write(".file\t"+nombre+".compi\n");
-//            w.write(".type main, @function\n");
-//            w.write(".globl  main\n");
-            //PrintWriter wr = new PrintWriter(w);
-            //aca el swich
             listaCI op;
             for (int i = 0; i < lista.size(); i++) {
                 op = lista.get(i).getNom();
@@ -50,14 +45,14 @@ public class Assembly {
                         w.write(generateMultInt(gen));
                         break;
                     case MULTF:
+                        w.write(generateMultFloat(gen));
                         break;
-                        //aca escribir en el archivo
                     case DIVIDEI:
                         w.write(generateDivInt(gen));
                         break;
                     case DIVIDEF:
+                        w.write(generateDivFloat(gen));
                         break;
-                        //aca escribir en el archivo
                     case MODI:
                         w.write("\n\n"+generateModInt(gen)+"\n\n");
                         break;
@@ -68,6 +63,7 @@ public class Assembly {
                         w.write(generateMinusInt(gen));
                         break;
                     case MINUSF:
+                        w.write(generateMinusFloat(gen));
                         break;
                         //aca escribir en el archivo
                     case GTR:
@@ -210,12 +206,9 @@ public class Assembly {
     }
     
     private String generateAddFloat(OperadorCI op){
-        String result = "\tmovl " + varOperand(op.getOp()) + ", %eax\n"+
-                        "\tmovl %eax, %xmm0\n"+
-                        "\tmovl " + varOperand(op.getOp1()) + ", %eax\n"+
-                        "\tmovl %eax, %xmm1\n"+
-                        "\taddss %xmm1, %xmm0\n"+
-                        "\tmovl %xmm0, " + varOperand(op.getOp2())+"\n";
+        String result = "\tflds "+varOperand(op.getOp())+"\n"+
+                        "\tfadds "+varOperand(op.getOp1())+"\n"+
+                        "\tfstps "+varOperand(op.getOp2())+"\n";
         return result;
     }
     
@@ -387,6 +380,9 @@ public class Assembly {
 //            result="\tmovl "+varOperand(op.getOp1())+", %eax\n"+
 //            "\tpushl %eax\n";
 //        }
+//        if(varOperand(op.getOp()).equals("")){
+//            return "";
+//        }
         result="\tpushl "+varOperand(op.getOp())+"\n";
         pusheado++;
         return result;
@@ -446,6 +442,27 @@ public class Assembly {
             result = "\tnop\n"; //no operaciòn, "return;"
         }
         result += "\tleave\n\tret\n";
+        return result;
+    }
+    
+    private String generateMinusFloat(OperadorCI op){
+        String result = "\tflds "+varOperand(op.getOp())+"\n"+
+                        "\tfsubs "+varOperand(op.getOp1())+"\n"+
+                        "\tfstps "+varOperand(op.getOp2())+"\n";
+        return result;
+    }
+    
+    private String generateMultFloat(OperadorCI op){
+        String result = "\tflds "+varOperand(op.getOp())+"\n"+
+                        "\tfmuls "+varOperand(op.getOp1())+"\n"+
+                        "\tfstps "+varOperand(op.getOp2())+"\n";
+        return result;
+    }
+    
+    private String generateDivFloat(OperadorCI op){
+        String result = "\tflds "+varOperand(op.getOp())+"\n"+
+                        "\tfdivs "+varOperand(op.getOp1())+"\n"+
+                        "\tfstps "+varOperand(op.getOp2())+"\n";       
         return result;
     }
     

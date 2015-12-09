@@ -104,36 +104,36 @@ public class VisitorCI implements ASTVisitor<Expression>{
         var.setType(left.getType());
         switch (op) {
             case MINUS:
-                li.add(new OperadorCI(listaCI.MINUSI, left, right, var));
-//                if (left.getType()==Type.INT) {
-//                    li.add(new OperadorCI(listaCI.MINUSI, left, right, var));
-//                }else{
-//                    li.add(new OperadorCI(listaCI.MINUSF, left, right, var));
-//                }
+ //               li.add(new OperadorCI(listaCI.MINUSI, left, right, var));
+                if (var.getType().toString().equals("int")) {
+                    li.add(new OperadorCI(listaCI.MINUSI, left, right, var));
+                }else{
+                    li.add(new OperadorCI(listaCI.MINUSF, left, right, var));
+                }
                 break;
             case PLUS:
-                li.add(new OperadorCI(listaCI.ADDINT, left, right, var));
-//                if (left.getType()==Type.INT) {
-//                    li.add(new OperadorCI(listaCI.ADDINT, left, right, var));
-//                }else{
-//                    li.add(new OperadorCI(listaCI.ADDFLOAT, left, right, var));
-//                }
+//                li.add(new OperadorCI(listaCI.ADDINT, left, right, var));
+                if (var.getType().toString().equals("int")) {
+                    li.add(new OperadorCI(listaCI.ADDINT, left, right, var));
+                }else{
+                    li.add(new OperadorCI(listaCI.ADDFLOAT, left, right, var));
+                }
                 break;
             case MULT:
-                li.add(new OperadorCI(listaCI.MULTI, left, right, var));
-//                if (left.getType()==Type.INT) {
-//                    li.add(new OperadorCI(listaCI.MULTI, left, right, var));
-//                }else{
-//                    li.add(new OperadorCI(listaCI.MULTF, left, right, var));
-//                }
+//                li.add(new OperadorCI(listaCI.MULTI, left, right, var));
+                if (var.getType().toString().equals("int")) {
+                    li.add(new OperadorCI(listaCI.MULTI, left, right, var));
+                }else{
+                    li.add(new OperadorCI(listaCI.MULTF, left, right, var));
+                }
                 break;
             case DIVIDE:
-                li.add(new OperadorCI(listaCI.DIVIDEI, left, right, var));
-//                if (left.getType()==Type.INT) {
-//                    li.add(new OperadorCI(listaCI.DIVIDEI, left, right, var));
-//                }else{
-//                    li.add(new OperadorCI(listaCI.DIVIDEF, left, right, var));
-//                }
+//                li.add(new OperadorCI(listaCI.DIVIDEI, left, right, var));
+                if (var.getType().toString().equals("int")) {
+                    li.add(new OperadorCI(listaCI.DIVIDEI, left, right, var));
+                }else{
+                    li.add(new OperadorCI(listaCI.DIVIDEF, left, right, var));
+                }
                 break;
             case DIV:
                 if(left.getClass().toString().contains("IntLiteral")){

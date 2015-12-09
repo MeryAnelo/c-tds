@@ -45,7 +45,7 @@ public class Main {
                             Assembly ass = new Assembly();
                             String rute = sTexto.substring(0,sTexto.lastIndexOf("/"));
                             String name = sTexto.substring(rute.length(), sTexto.length()-".compi".length())+".s";
-                            ass.generateAss(rute,name,v3.getListaCI());
+                            ass.generateAss(name,v3.getListaCI());
                         }else{
                             System.out.println("ERROR: invalid file extension");
                         }
